@@ -19,7 +19,22 @@ class Auth extends Controller
         $user = $db->table('users')->where('username', $username)->get()->getRow();
         if ($user && password_verify($password, $user->password_hash)) {
             session()->set('user_id', $user->id);
-            return redirect()->to(site_url('inventory'));
+            session()->set('user_full_name', $user->full_name);
+            
+            // Get user roles
+            $roles = $db->table('roles')->select('roles.name')
+                ->join('user_roles', 'user_roles.role_id = roles.id')
+                ->where('user_roles.user_id', $user->id)
+                ->get()->getResultArray();
+
+            $userRoles = array_map(fn($r) => $r['name'], $roles);
+
+            // Redirect based on role
+            if (in_array('central_admin', $userRoles, true) || in_array('branch_manager', $userRoles, true)) {
+                return redirect()->to(site_url('dashboard'));
+            } else {
+                return redirect()->to(site_url('inventory'));
+            }
         }
 
         return redirect()->back()->with('error', 'Invalid credentials');
