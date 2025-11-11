@@ -8,7 +8,13 @@ class RoleSeeder extends Seeder
 {
     public function run()
     {
-        $roles = [ ['name' => 'branch_manager'], ['name' => 'inventory_staff'], ['name' => 'central_admin'] ];
+        $roles = [
+            ['name' => 'branch_manager'],
+            ['name' => 'inventory_staff'],
+            ['name' => 'central_admin'],
+            ['name' => 'supplier'],
+            ['name' => 'franchise'],
+        ];
         db_connect()->table('roles')->ignore(true)->insertBatch($roles);
     }
 }

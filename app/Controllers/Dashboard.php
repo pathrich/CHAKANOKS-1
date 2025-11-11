@@ -17,14 +17,21 @@ class Dashboard extends BaseController
         
         log_message('debug', 'Dashboard Access - User ID: ' . session('user_id') . ', Roles: ' . json_encode($userRoles));
 
-        // Check if user has admin or manager role
+        // Check role and route accordingly
         if (in_array('central_admin', $userRoles, true)) {
             return $this->adminDashboard();
-        } elseif (in_array('branch_manager', $userRoles, true)) {
+        }
+        if (in_array('branch_manager', $userRoles, true)) {
             return $this->managerDashboard();
         }
+        if (in_array('supplier', $userRoles, true)) {
+            return $this->supplierDashboard();
+        }
+        if (in_array('franchise', $userRoles, true)) {
+            return $this->franchiseDashboard();
+        }
 
-        // If user has no admin/manager role, show an access denied message
+        // If user has no recognized dashboard role, show an access denied message
         $data = [
             'userRoles' => $userRoles,
         ];
@@ -139,5 +146,58 @@ class Dashboard extends BaseController
         ];
 
         return view('dashboard/manager', $data);
+    }
+
+    protected function supplierDashboard()
+    {
+        $db = db_connect();
+
+        // Basic supplier view: show supplied items (best effort) and recent activity
+        // Note: There is no supplier relation in schema; show general info instead
+        $totalItems = $db->table('items')->countAllResults();
+        $recentActivity = $db->table('activity_logs')
+            ->select('activity_logs.*, users.full_name')
+            ->join('users', 'users.id = activity_logs.user_id', 'left')
+            ->orderBy('activity_logs.created_at', 'DESC')
+            ->limit(10)
+            ->get()->getResultArray();
+
+        $data = [
+            'totalItems' => $totalItems,
+            'recentActivity' => $recentActivity,
+        ];
+
+        return view('dashboard/supplier', $data);
+    }
+
+    protected function franchiseDashboard()
+    {
+        $db = db_connect();
+
+        // Franchise dashboard similar to manager but with limited info
+        $user = $db->table('users')
+            ->select('branch_id')
+            ->where('id', session('user_id'))
+            ->get()->getRow();
+
+        $branchId = $user->branch_id ?? null;
+        $data = [];
+
+        if ($branchId) {
+            $branch = $db->table('branches')->where('id', $branchId)->get()->getRow();
+            $data['branch'] = $branch;
+            $data['itemCount'] = $db->table('branch_stocks')->where('branch_id', $branchId)->countAllResults();
+            $data['totalStock'] = $db->table('branch_stocks')->selectSum('quantity')->where('branch_id', $branchId)->get()->getRow()->quantity ?? 0;
+        }
+
+        $data['recentActivity'] = $db->table('activity_logs')
+            ->select('activity_logs.*, users.full_name')
+            ->join('users', 'users.id = activity_logs.user_id', 'left')
+            ->where('users.branch_id', $branchId)
+            ->orderBy('activity_logs.created_at', 'DESC')
+            ->limit(10)
+            ->get()->getResultArray();
+
+        return view('dashboard/franchise', $data);
     }
 }

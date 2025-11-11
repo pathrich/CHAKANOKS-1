@@ -29,6 +29,13 @@ class UserRoleSeeder extends Seeder
         if (isset($userMap['admin'], $roleMap['central_admin'])) {
             $pairs[] = [ 'user_id' => $userMap['admin'], 'role_id' => $roleMap['central_admin'] ];
         }
+        // Add supplier and franchise mappings if present
+        if (isset($userMap['supplier'], $roleMap['supplier'])) {
+            $pairs[] = [ 'user_id' => $userMap['supplier'], 'role_id' => $roleMap['supplier'] ];
+        }
+        if (isset($userMap['franchise'], $roleMap['franchise'])) {
+            $pairs[] = [ 'user_id' => $userMap['franchise'], 'role_id' => $roleMap['franchise'] ];
+        }
         if ($pairs) {
             $db->table('user_roles')->ignore(true)->insertBatch($pairs);
         }
