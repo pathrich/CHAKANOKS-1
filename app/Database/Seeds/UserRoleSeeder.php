@@ -9,6 +9,8 @@ class UserRoleSeeder extends Seeder
     public function run()
     {
         $db = db_connect();
+        $db->table('user_roles')->emptyTable();
+        
         // Resolve IDs by names to avoid mismatch
         $roleMap = [];
         foreach ($db->table('roles')->select('id,name')->get()->getResultArray() as $r) {
@@ -20,16 +22,15 @@ class UserRoleSeeder extends Seeder
         }
 
         $pairs = [];
+        if (isset($userMap['admin'], $roleMap['central_admin'])) {
+            $pairs[] = [ 'user_id' => $userMap['admin'], 'role_id' => $roleMap['central_admin'] ];
+        }
         if (isset($userMap['manager'], $roleMap['branch_manager'])) {
             $pairs[] = [ 'user_id' => $userMap['manager'], 'role_id' => $roleMap['branch_manager'] ];
         }
         if (isset($userMap['staff'], $roleMap['inventory_staff'])) {
             $pairs[] = [ 'user_id' => $userMap['staff'], 'role_id' => $roleMap['inventory_staff'] ];
         }
-        if (isset($userMap['admin'], $roleMap['central_admin'])) {
-            $pairs[] = [ 'user_id' => $userMap['admin'], 'role_id' => $roleMap['central_admin'] ];
-        }
-        // Add supplier and franchise mappings if present
         if (isset($userMap['supplier'], $roleMap['supplier'])) {
             $pairs[] = [ 'user_id' => $userMap['supplier'], 'role_id' => $roleMap['supplier'] ];
         }
@@ -37,7 +38,7 @@ class UserRoleSeeder extends Seeder
             $pairs[] = [ 'user_id' => $userMap['franchise'], 'role_id' => $roleMap['franchise'] ];
         }
         if ($pairs) {
-            $db->table('user_roles')->ignore(true)->insertBatch($pairs);
+            $db->table('user_roles')->insertBatch($pairs);
         }
     }
 }

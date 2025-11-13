@@ -12,13 +12,14 @@ class UserSeeder extends Seeder
         $now = Time::now('UTC');
         $password = password_hash('password123', PASSWORD_BCRYPT);
         $users = [
+            [ 'username' => 'admin', 'password_hash' => $password, 'full_name' => 'Central Admin', 'branch_id' => null, 'created_at' => $now, 'updated_at' => $now ],
             [ 'username' => 'manager', 'password_hash' => $password, 'full_name' => 'Branch Manager', 'branch_id' => 1, 'created_at' => $now, 'updated_at' => $now ],
             [ 'username' => 'staff', 'password_hash' => $password, 'full_name' => 'Inventory Staff', 'branch_id' => 1, 'created_at' => $now, 'updated_at' => $now ],
-            [ 'username' => 'admin', 'password_hash' => $password, 'full_name' => 'Central Admin', 'branch_id' => null, 'created_at' => $now, 'updated_at' => $now ],
             [ 'username' => 'supplier', 'password_hash' => $password, 'full_name' => 'Supplier User', 'branch_id' => null, 'created_at' => $now, 'updated_at' => $now ],
             [ 'username' => 'franchise', 'password_hash' => $password, 'full_name' => 'Franchise User', 'branch_id' => 1, 'created_at' => $now, 'updated_at' => $now ],
         ];
-        db_connect()->table('users')->ignore(true)->insertBatch($users);
+        db_connect()->table('users')->emptyTable();
+        db_connect()->table('users')->insertBatch($users);
     }
 }
 

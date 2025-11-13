@@ -1,0 +1,46 @@
+ERROR - 2025-11-13 16:29:39 --> mysqli_sql_exception: Cannot truncate a table referenced in a foreign key constraint (`uaryman_db`.`user_roles`, CONSTRAINT `user_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `uaryman_db`.`roles` (`id`)) in C:\xampp1\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('TRUNCATE `roles...', 0)
+#1 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('TRUNCATE `roles...')
+#2 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('TRUNCATE `roles...')
+#3 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseBuilder.php(2773): CodeIgniter\Database\BaseConnection->query('TRUNCATE `roles...', NULL, false)
+#4 C:\xampp1\htdocs\CHAKANOKS-1\app\Database\Seeds\RoleSeeder.php(18): CodeIgniter\Database\BaseBuilder->truncate()
+#5 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\Seeder.php(149): App\Database\Seeds\RoleSeeder->run()
+#6 C:\xampp1\htdocs\CHAKANOKS-1\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#7 C:\xampp1\htdocs\CHAKANOKS-1\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#8 C:\xampp1\htdocs\CHAKANOKS-1\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#9 C:\xampp1\htdocs\CHAKANOKS-1\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#10 C:\xampp1\htdocs\CHAKANOKS-1\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#11 C:\xampp1\htdocs\CHAKANOKS-1\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#12 {main}
+ERROR - 2025-11-13 16:29:40 --> mysqli_sql_exception: Cannot truncate a table referenced in a foreign key constraint (`uaryman_db`.`activity_logs`, CONSTRAINT `activity_logs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `uaryman_db`.`users` (`id`)) in C:\xampp1\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('TRUNCATE `users...', 0)
+#1 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('TRUNCATE `users...')
+#2 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('TRUNCATE `users...')
+#3 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseBuilder.php(2773): CodeIgniter\Database\BaseConnection->query('TRUNCATE `users...', NULL, false)
+#4 C:\xampp1\htdocs\CHAKANOKS-1\app\Database\Seeds\UserSeeder.php(21): CodeIgniter\Database\BaseBuilder->truncate()
+#5 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\Seeder.php(149): App\Database\Seeds\UserSeeder->run()
+#6 C:\xampp1\htdocs\CHAKANOKS-1\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#7 C:\xampp1\htdocs\CHAKANOKS-1\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#8 C:\xampp1\htdocs\CHAKANOKS-1\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#9 C:\xampp1\htdocs\CHAKANOKS-1\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#10 C:\xampp1\htdocs\CHAKANOKS-1\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#11 C:\xampp1\htdocs\CHAKANOKS-1\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#12 {main}
+ERROR - 2025-11-13 16:30:55 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`uaryman_db`.`users`, CONSTRAINT `users_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE SET NULL) in C:\xampp1\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `us...', 0)
+#1 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `us...')
+#2 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `us...')
+#3 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseBuilder.php(1841): CodeIgniter\Database\BaseConnection->query('INSERT INTO `us...', NULL, false)
+#4 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseBuilder.php(2230): CodeIgniter\Database\BaseBuilder->batchExecute('_insertBatch', 100)
+#5 C:\xampp1\htdocs\CHAKANOKS-1\app\Database\Seeds\UserSeeder.php(22): CodeIgniter\Database\BaseBuilder->insertBatch(Array)
+#6 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\Seeder.php(149): App\Database\Seeds\UserSeeder->run()
+#7 C:\xampp1\htdocs\CHAKANOKS-1\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#8 C:\xampp1\htdocs\CHAKANOKS-1\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#9 C:\xampp1\htdocs\CHAKANOKS-1\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#10 C:\xampp1\htdocs\CHAKANOKS-1\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#11 C:\xampp1\htdocs\CHAKANOKS-1\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp1\htdocs\CHAKANOKS-1\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
