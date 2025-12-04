@@ -9,7 +9,7 @@ class BranchSeeder extends Seeder
 {
     public function run()
     {
-        $now = Time::now('UTC');
+        $now = Time::now('UTC')->toDateTimeString();
         $branches = [
             [ 'name' => 'Main Branch', 'code' => 'DAV-MAIN', 'city' => 'Davao City', 'created_at' => $now, 'updated_at' => $now ],
             [ 'name' => 'North Branch', 'code' => 'DAV-NORTH', 'city' => 'Davao City', 'created_at' => $now, 'updated_at' => $now ],
@@ -17,7 +17,8 @@ class BranchSeeder extends Seeder
             [ 'name' => 'East Branch', 'code' => 'DAV-EAST', 'city' => 'Davao City', 'created_at' => $now, 'updated_at' => $now ],
             [ 'name' => 'West Branch', 'code' => 'DAV-WEST', 'city' => 'Davao City', 'created_at' => $now, 'updated_at' => $now ],
         ];
-        db_connect()->table('branches')->ignore(true)->insertBatch($branches);
+        $this->db->table('branches')->emptyTable();
+        $this->db->table('branches')->insertBatch($branches);
     }
 }
 

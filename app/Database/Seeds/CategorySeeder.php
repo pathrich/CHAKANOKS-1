@@ -8,12 +8,14 @@ class CategorySeeder extends Seeder
 {
     public function run()
     {
-        db_connect()->table('item_categories')->ignore(true)->insertBatch([
+        $data = [
             [ 'name' => 'Produce' ],
             [ 'name' => 'Meat & Poultry' ],
             [ 'name' => 'Dairy' ],
             [ 'name' => 'Frozen' ],
-        ]);
+        ];
+        $this->db->table('item_categories')->emptyTable();
+        $this->db->table('item_categories')->insertBatch($data);
     }
 }
 

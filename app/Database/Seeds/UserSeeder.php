@@ -9,7 +9,7 @@ class UserSeeder extends Seeder
 {
     public function run()
     {
-        $now = Time::now('UTC');
+        $now = Time::now('UTC')->toDateTimeString();
         $password = password_hash('password123', PASSWORD_BCRYPT);
         $users = [
             [ 'username' => 'admin', 'password_hash' => $password, 'full_name' => 'Central Admin', 'branch_id' => null, 'created_at' => $now, 'updated_at' => $now ],
@@ -18,8 +18,8 @@ class UserSeeder extends Seeder
             [ 'username' => 'supplier', 'password_hash' => $password, 'full_name' => 'Supplier User', 'branch_id' => null, 'created_at' => $now, 'updated_at' => $now ],
             [ 'username' => 'franchise', 'password_hash' => $password, 'full_name' => 'Franchise User', 'branch_id' => 1, 'created_at' => $now, 'updated_at' => $now ],
         ];
-        db_connect()->table('users')->emptyTable();
-        db_connect()->table('users')->insertBatch($users);
+        $this->db->table('users')->emptyTable();
+        $this->db->table('users')->insertBatch($users);
     }
 }
 

@@ -166,12 +166,58 @@ $title = 'Manager Dashboard';
             display: flex;
             gap: 1rem;
         }
+
+        .action-card {
+            background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: block;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .action-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-card p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .action-card .badge {
+            display: inline-block;
+            background-color: rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <h1><?= $title ?></h1>
         <div class="nav-links">
+            <a href="<?= site_url('order') ?>">Orders</a>
             <a href="<?= site_url('inventory') ?>">Inventory</a>
             <a href="<?= site_url('logout') ?>">Logout</a>
         </div>
@@ -197,6 +243,31 @@ $title = 'Manager Dashboard';
                 <div class="stat-card">
                     <h3>Total Units in Stock</h3>
                     <div class="value"><?= $branchData['totalStock'] ?? 0 ?></div>
+                </div>
+            </div>
+
+            <!-- Order Management Section -->
+            <div class="action-grid">
+                <a href="<?= site_url('order') ?>" class="action-card">
+                    <h4>📦 Manage Orders</h4>
+                    <p>View and manage your orders</p>
+                    <div class="badge">
+                        <?= ($branchData['draftOrders'] ?? 0) + ($branchData['pendingOrders'] ?? 0) + ($branchData['approvedOrders'] ?? 0) ?> Total
+                    </div>
+                </a>
+                <a href="<?= site_url('order/create') ?>" class="action-card">
+                    <h4>➕ Create New Order</h4>
+                    <p>Create a new purchase order</p>
+                    <div class="badge">
+                        <?= ($branchData['draftOrders'] ?? 0) ?> Draft
+                    </div>
+                </a>
+                <div class="action-card" style="opacity: 0.9;">
+                    <h4>⏳ Pending Approval</h4>
+                    <p>Awaiting admin approval</p>
+                    <div class="badge">
+                        <?= ($branchData['pendingOrders'] ?? 0) ?> Pending
+                    </div>
                 </div>
             </div>
 

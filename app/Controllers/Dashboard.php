@@ -139,6 +139,22 @@ class Dashboard extends BaseController
                 ->orderBy('activity_logs.created_at', 'DESC')
                 ->limit(10)
                 ->get()->getResultArray();
+
+            // Get order statistics for this branch
+            $branchData['draftOrders'] = $db->table('orders')
+                ->where('branch_id', $branchId)
+                ->where('status', 'Draft')
+                ->countAllResults();
+            
+            $branchData['pendingOrders'] = $db->table('orders')
+                ->where('branch_id', $branchId)
+                ->where('status', 'Pending')
+                ->countAllResults();
+            
+            $branchData['approvedOrders'] = $db->table('orders')
+                ->where('branch_id', $branchId)
+                ->where('status', 'Approved')
+                ->countAllResults();
         }
 
         $data = [

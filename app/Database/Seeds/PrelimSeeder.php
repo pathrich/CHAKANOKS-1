@@ -9,14 +9,14 @@ class PrelimSeeder extends Seeder
 {
     public function run()
     {
-        // Call granular seeders
-        $this->call('App\Database\Seeds\BranchSeeder');
-        $this->call('App\Database\Seeds\RoleSeeder');
-        $this->call('App\Database\Seeds\UserSeeder');
-        $this->call('App\Database\Seeds\UserRoleSeeder');
-        $this->call('App\Database\Seeds\CategorySeeder');
-        $this->call('App\Database\Seeds\ItemSeeder');
-        $this->call('App\Database\Seeds\StockSeeder');
+        // Call granular seeders using class references
+        $this->call(BranchSeeder::class);
+        $this->call(RoleSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(UserRoleSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(ItemSeeder::class);
+        $this->call(StockSeeder::class);
     }
 }
 

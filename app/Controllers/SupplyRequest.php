@@ -1,0 +1,233 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Models\SupplyRequestModel;
+use App\Models\NotificationModel;
+
+class SupplyRequest extends BaseController
+{
+    protected $supplyRequestModel;
+    protected $notificationModel;
+
+    public function __construct()
+    {
+        $this->supplyRequestModel = new SupplyRequestModel();
+        $this->notificationModel = new NotificationModel();
+    }
+
+    /**
+     * Display supply requests dashboard (admin view)
+     */
+    public function index()
+    {
+        // Ensure user is authenticated
+        if (!session('user_id')) {
+            return redirect()->to('/login');
+        }
+
+        // Check if admin
+        $db = db_connect();
+        $userRoles = $db->table('user_roles')
+                        ->select('role_id')
+                        ->join('roles', 'roles.id = user_roles.role_id')
+                        ->where('user_id', session('user_id'))
+                        ->get()
+                        ->getResultArray();
+
+        $roleIds = array_column($userRoles, 'role_id');
+        $isAdmin = in_array(1, $roleIds) || in_array(2, $roleIds);
+
+        if (!$isAdmin) {
+            return $this->response->setStatusCode(403)->setBody('Access denied');
+        }
+
+        // Get pending requests
+        $pendingRequests = $this->supplyRequestModel->getPending();
+
+        // Get request details with items for each
+        foreach ($pendingRequests as &$request) {
+            $request = $this->supplyRequestModel->getWithItems($request['id']);
+        }
+
+        $data = [
+            'pendingRequests' => $pendingRequests,
+            'title' => 'Supply Requests',
+        ];
+
+        return view('supply_request/admin_dashboard', $data);
+    }
+
+    /**
+     * Staff submits a supply request for their branch
+     * Expected POST data:
+     * - items: array of ['item_id' => int, 'quantity' => int, 'notes' => string (optional)]
+     * - notes: string (optional)
+     */
+    public function submit()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'AJAX request required']);
+        }
+
+        if (!session('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
+        }
+
+        $db = db_connect();
+
+        // Get user's branch
+        $user = $db->table('users')
+                   ->select('branch_id')
+                   ->find(session('user_id'));
+
+        if (!$user || !$user['branch_id']) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'User has no assigned branch']);
+        }
+
+        // Validate input
+        $items = $this->request->getJSON()->items ?? [];
+        $notes = $this->request->getJSON()->notes ?? null;
+
+        if (empty($items)) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'No items provided']);
+        }
+
+        try {
+            // Create supply request
+            $requestId = $this->supplyRequestModel->createWithItems(
+                $user['branch_id'],
+                session('user_id'),
+                $items,
+                $notes
+            );
+
+            return $this->response->setJSON([
+                'success' => true,
+                'requestId' => $requestId,
+                'message' => 'Supply request submitted successfully',
+            ]);
+        } catch (\Exception $e) {
+            log_message('error', 'Supply request submission failed: ' . $e->getMessage());
+            return $this->response->setStatusCode(500)->setJSON(['error' => 'Failed to submit request']);
+        }
+    }
+
+    /**
+     * Admin approves a supply request
+     * Expected POST data:
+     * - request_id: int
+     * - approval_notes: string (optional)
+     */
+    public function approve()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'AJAX request required']);
+        }
+
+        if (!session('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
+        }
+
+        $requestId = (int)$this->request->getJSON()->request_id ?? 0;
+        $approvalNotes = $this->request->getJSON()->approval_notes ?? null;
+
+        if (!$requestId) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid request ID']);
+        }
+
+        try {
+            // Approve request (this will also notify branch manager)
+            $this->supplyRequestModel->approveRequest($requestId, session('user_id'), $approvalNotes);
+
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Supply request approved. Branch manager has been notified.',
+            ]);
+        } catch (\Exception $e) {
+            log_message('error', 'Supply request approval failed: ' . $e->getMessage());
+            return $this->response->setStatusCode(500)->setJSON(['error' => 'Failed to approve request']);
+        }
+    }
+
+    /**
+     * Admin rejects a supply request
+     * Expected POST data:
+     * - request_id: int
+     * - reason: string
+     */
+    public function reject()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'AJAX request required']);
+        }
+
+        if (!session('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
+        }
+
+        $requestId = (int)$this->request->getJSON()->request_id ?? 0;
+        $reason = $this->request->getJSON()->reason ?? '';
+
+        if (!$requestId || !$reason) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid request or reason']);
+        }
+
+        try {
+            $this->supplyRequestModel->rejectRequest($requestId, session('user_id'), $reason);
+
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Supply request rejected.',
+            ]);
+        } catch (\Exception $e) {
+            log_message('error', 'Supply request rejection failed: ' . $e->getMessage());
+            return $this->response->setStatusCode(500)->setJSON(['error' => 'Failed to reject request']);
+        }
+    }
+
+    /**
+     * Get pending requests count (for admin dashboard badge)
+     */
+    public function getPendingCount()
+    {
+        if (!session('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
+        }
+
+        $count = $this->supplyRequestModel
+                      ->where('status', 'Pending')
+                      ->countAllResults();
+
+        return $this->response->setJSON(['count' => $count]);
+    }
+
+    /**
+     * Get supply requests for staff view (their branch)
+     */
+    public function myRequests()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'AJAX request required']);
+        }
+
+        if (!session('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
+        }
+
+        $db = db_connect();
+
+        // Get user's branch
+        $user = $db->table('users')
+                   ->select('branch_id')
+                   ->find(session('user_id'));
+
+        if (!$user || !$user['branch_id']) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'User has no assigned branch']);
+        }
+
+        $requests = $this->supplyRequestModel->getByBranch($user['branch_id']);
+
+        return $this->response->setJSON(['requests' => $requests]);
+    }
+}
