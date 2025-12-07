@@ -40,6 +40,9 @@ class UserRoleSeeder extends Seeder
         if (isset($userMap['logistics'], $roleMap['logistics_coordinator'])) {
             $pairs[] = [ 'user_id' => $userMap['logistics'], 'role_id' => $roleMap['logistics_coordinator'] ];
         }
+        if (isset($userMap['sysadmin'], $roleMap['system_admin'])) {
+            $pairs[] = [ 'user_id' => $userMap['sysadmin'], 'role_id' => $roleMap['system_admin'] ];
+        }
         if ($pairs) {
             $db->table('user_roles')->insertBatch($pairs);
         }

@@ -10,6 +10,7 @@ class RoleSeeder extends Seeder
     {
         $roles = [
             ['name' => 'central_admin'],
+            ['name' => 'system_admin'],
             ['name' => 'branch_manager'],
             ['name' => 'inventory_staff'],
             ['name' => 'supplier'],
