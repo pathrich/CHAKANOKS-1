@@ -34,6 +34,10 @@ class Auth extends Controller
                 return redirect()->to(site_url('deliveries'));
             }
 
+            if (in_array('system_admin', $userRoles, true)) {
+                return redirect()->to(site_url('system-admin'));
+            }
+
             if (
                 in_array('central_admin', $userRoles, true) ||
                 in_array('branch_manager', $userRoles, true) ||
