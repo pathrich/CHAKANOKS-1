@@ -38,3 +38,16 @@ $routes->get('api/items', 'Api\Items::list', ['filter' => 'auth']);
 $routes->get('api/notifications', 'Api\Notifications::list', ['filter' => 'auth']);
 $routes->post('api/notifications/(:num)/read', 'Api\Notifications::markRead/$1', ['filter' => 'auth']);
 
+// Purchase Order Routes
+$routes->get('purchase-order', 'PurchaseOrder::index', ['filter' => 'auth']);
+$routes->post('purchase-order/supplier-accept', 'PurchaseOrder::supplierAccept', ['filter' => 'auth']);
+$routes->post('purchase-order/supplier-request-changes', 'PurchaseOrder::supplierRequestChanges', ['filter' => 'auth']);
+$routes->post('purchase-order/supplier-decline', 'PurchaseOrder::supplierDecline', ['filter' => 'auth']);
+$routes->post('purchase-order/supplier-ship', 'PurchaseOrder::supplierShip', ['filter' => 'auth']);
+$routes->post('purchase-order/mark-delivered', 'PurchaseOrder::markDelivered', ['filter' => 'auth']);
+// Delivery / Logistics routes (logistics_coordinator only)
+$routes->get('deliveries', 'Delivery::index', ['filter' => 'role:logistics_coordinator']);
+$routes->get('deliveries/create', 'Delivery::create', ['filter' => 'role:logistics_coordinator']);
+$routes->post('deliveries/store', 'Delivery::store', ['filter' => 'role:logistics_coordinator']);
+$routes->get('deliveries/track/(:num)', 'Delivery::track/$1', ['filter' => 'role:logistics_coordinator']);
+$routes->post('deliveries/optimize', 'Delivery::optimizeRoute', ['filter' => 'role:logistics_coordinator']);

@@ -14,6 +14,7 @@ class RoleSeeder extends Seeder
             ['name' => 'inventory_staff'],
             ['name' => 'supplier'],
             ['name' => 'franchise'],
+            ['name' => 'logistics_coordinator'],
         ];
         $this->db->table('roles')->emptyTable();
         $this->db->table('roles')->insertBatch($roles);

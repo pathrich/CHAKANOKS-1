@@ -136,7 +136,7 @@ class SupplyRequestModel extends Model
         $db->transBegin();
 
         try {
-            // Update request status
+            // Update request status to Approved (we will create a PO next)
             $db->table('supply_requests')->update(
                 [
                     'status'      => 'Approved',
@@ -159,11 +159,37 @@ class SupplyRequestModel extends Model
                 'details'    => "Supply request #$requestId approved",
             ]);
 
-            // Notify branch manager
-            $this->notifyBranchManager($request, $approvedBy);
+            // Create Purchase Order for this approved request
+            $poModel = new \App\Models\PurchaseOrderModel();
+
+            // Choose a supplier: for now pick the first available supplier
+            $supplier = $db->table('suppliers')->orderBy('id', 'ASC')->get()->getRowArray();
+            $supplierId = $supplier['id'] ?? null;
+
+            // Prepare items for PO (unit_price unknown => 0)
+            $poItems = [];
+            foreach ($request['items'] as $it) {
+                $poItems[] = [
+                    'item_id' => $it['item_id'],
+                    'quantity' => $it['quantity_requested'],
+                    'unit_price' => 0.00,
+                    'notes' => $it['notes'] ?? null,
+                ];
+            }
+
+            $po = $poModel->createFromSupplyRequest($requestId, $supplierId, $poItems, $approvedBy, $approvalNotes);
+
+            // Notify branch manager and franchise and supplier
+            $this->notifyBranchManager($request, $approvedBy, $po);
+            $this->notifySupplier($supplierId, $po);
+            $this->notifyFranchise($request, $po);
+
+            // Log audit
+            $audit = new \App\Models\AuditLogModel();
+            $audit->log('purchase_order_created', json_encode(['po_id' => $po['id'], 'supply_request_id' => $requestId]), $approvedBy, 'admin');
 
             $db->transCommit();
-            return $requestId;
+            return $po;
         } catch (\Exception $e) {
             $db->transRollback();
             throw $e;
@@ -243,5 +269,43 @@ class SupplyRequestModel extends Model
             'related_id'    => $request['id'],
             'related_type'  => 'supply_request',
         ]);
+    }
+
+    private function notifySupplier($supplierId, $po)
+    {
+        if (!$supplierId || !$po) return;
+
+        $db = $this->db;
+        $supplier = $db->table('suppliers')->find($supplierId);
+        if (!$supplier) return;
+
+        $message = sprintf("New Purchase Order #%s created. Total items: %d. Please confirm or request changes.", $po['po_number'], $po['total_items']);
+
+        // Create a notification record
+        $db->table('notifications')->insert([
+            'recipient_id' => null,
+            'type' => 'purchase_order_created',
+            'title' => "PO #" . $po['po_number'],
+            'message' => $message,
+            'related_id' => $po['id'],
+            'related_type' => 'purchase_order',
+        ]);
+    }
+
+    private function notifyFranchise($request, $po)
+    {
+        $db = $this->db;
+        // If the request referenced a franchise as destination, try to notify - using branch's manager
+        $branchManager = $db->table('users')->where('branch_id', $request['branch_id'])->select('id')->first();
+        if ($branchManager) {
+            $db->table('notifications')->insert([
+                'recipient_id' => $branchManager['id'],
+                'type' => 'purchase_order_created',
+                'title' => "PO #" . $po['po_number'] . " Created",
+                'message' => "Purchase Order " . $po['po_number'] . " has been created for your request.",
+                'related_id' => $po['id'],
+                'related_type' => 'purchase_order',
+            ]);
+        }
     }
 }

@@ -30,6 +30,10 @@ class Auth extends Controller
             $userRoles = array_map(fn($r) => $r['name'], $roles);
 
             // Redirect based on role
+            if (in_array('logistics_coordinator', $userRoles, true)) {
+                return redirect()->to(site_url('deliveries'));
+            }
+
             if (
                 in_array('central_admin', $userRoles, true) ||
                 in_array('branch_manager', $userRoles, true) ||
@@ -37,9 +41,9 @@ class Auth extends Controller
                 in_array('franchise', $userRoles, true)
             ) {
                 return redirect()->to(site_url('dashboard'));
-            } else {
-                return redirect()->to(site_url('inventory'));
             }
+
+            return redirect()->to(site_url('inventory'));
         }
 
         return redirect()->back()->with('error', 'Invalid credentials');
