@@ -51,3 +51,9 @@ $routes->get('deliveries/create', 'Delivery::create', ['filter' => 'role:logisti
 $routes->post('deliveries/store', 'Delivery::store', ['filter' => 'role:logistics_coordinator']);
 $routes->get('deliveries/track/(:num)', 'Delivery::track/$1', ['filter' => 'role:logistics_coordinator']);
 $routes->post('deliveries/optimize', 'Delivery::optimizeRoute', ['filter' => 'role:logistics_coordinator']);
+
+// System Administrator routes
+$routes->get('system-admin', 'SystemAdmin::index', ['filter' => 'role:system_admin']);
+$routes->get('system-admin/users', 'SystemAdmin::users', ['filter' => 'role:system_admin']);
+$routes->get('system-admin/backups', 'SystemAdmin::backups', ['filter' => 'role:system_admin']);
+$routes->get('system-admin/security', 'SystemAdmin::security', ['filter' => 'role:system_admin']);
