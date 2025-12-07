@@ -12,8 +12,20 @@ class SystemAdmin extends BaseController
 
     public function users()
     {
+        $db = db_connect();
+
+        $users = $db->table('users')
+            ->select('users.id, users.username, users.full_name')
+            ->select("GROUP_CONCAT(roles.name SEPARATOR ', ') as roles", false)
+            ->join('user_roles', 'user_roles.user_id = users.id', 'left')
+            ->join('roles', 'roles.id = user_roles.role_id', 'left')
+            ->groupBy('users.id')
+            ->get()
+            ->getResultArray();
+
         $data['title'] = 'User Management';
-        // placeholder: list of users could be loaded by a model
+        $data['users'] = $users;
+
         return view('system_admin/users', $data);
     }
 

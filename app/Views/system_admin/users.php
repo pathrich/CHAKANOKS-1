@@ -36,12 +36,20 @@ $title = $title ?? 'User Management';
                     <tr><th>Username</th><th>Full Name</th><th>Role(s)</th><th>Actions</th></tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>admin</td>
-                        <td>Central Admin</td>
-                        <td>central_admin</td>
-                        <td><a class="btn" href="#">Edit</a></td>
-                    </tr>
+                    <?php if (!empty($users)): ?>
+                        <?php foreach ($users as $u): ?>
+                            <tr>
+                                <td><?= esc($u['username']) ?></td>
+                                <td><?= esc($u['full_name']) ?></td>
+                                <td><?= esc($u['roles'] ?? '-') ?></td>
+                                <td><a class="btn" href="<?= site_url('system-admin/users/edit/'.$u['id']) ?>">Edit</a></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="4">No users found.</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
