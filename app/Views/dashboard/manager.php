@@ -464,13 +464,13 @@ $title = 'Manager Dashboard';
                         <?= ($branchData['draftOrders'] ?? 0) ?> Draft
                     </div>
                 </button>
-                <button class="action-card" onclick="handleActionClick('pending');" type="button">
+                <div class="action-card" style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); cursor: default;">
                     <h4>⏳ Pending Approval</h4>
-                    <p>Awaiting admin approval</p>
+                    <p>Your orders awaiting admin approval</p>
                     <div class="badge">
                         <?= ($branchData['pendingOrders'] ?? 0) ?> Pending
                     </div>
-                </button>
+                </div>
             </div>
 
             <!-- Low Stock Items Section -->

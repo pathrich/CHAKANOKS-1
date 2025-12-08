@@ -79,7 +79,9 @@ class SupplyRequest extends BaseController
         // Get user's branch
         $user = $db->table('users')
                    ->select('branch_id')
-                   ->find(session('user_id'));
+                   ->where('id', session('user_id'))
+                   ->get()
+                   ->getRowArray();
 
         if (!$user || !$user['branch_id']) {
             return $this->response->setStatusCode(400)->setJSON(['error' => 'User has no assigned branch']);
@@ -220,7 +222,9 @@ class SupplyRequest extends BaseController
         // Get user's branch
         $user = $db->table('users')
                    ->select('branch_id')
-                   ->find(session('user_id'));
+                   ->where('id', session('user_id'))
+                   ->get()
+                   ->getRowArray();
 
         if (!$user || !$user['branch_id']) {
             return $this->response->setStatusCode(400)->setJSON(['error' => 'User has no assigned branch']);

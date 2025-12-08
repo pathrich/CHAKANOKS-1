@@ -47,6 +47,7 @@ class Dashboard extends BaseController
         $totalUsers = $db->table('users')->countAllResults();
         $totalItems = $db->table('items')->countAllResults();
         $totalCategories = $db->table('item_categories')->countAllResults();
+        $totalStock = $db->table('branch_stocks')->selectSum('quantity')->get()->getRow()->quantity ?? 0;
 
         // Get recent activity logs
         $activityLogs = $db->table('activity_logs')
@@ -78,6 +79,7 @@ class Dashboard extends BaseController
             'totalUsers' => $totalUsers,
             'totalItems' => $totalItems,
             'totalCategories' => $totalCategories,
+            'totalStock' => $totalStock,
             'activityLogs' => $activityLogs,
             'lowStockItems' => $lowStockItems,
         ];

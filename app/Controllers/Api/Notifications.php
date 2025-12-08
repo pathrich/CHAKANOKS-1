@@ -57,7 +57,8 @@ class Notifications extends Controller
         $notification = $db->table('notifications')
                            ->where('id', $notificationId)
                            ->where('recipient_id', session('user_id'))
-                           ->first();
+                           ->get()
+                           ->getRowArray();
 
         if (!$notification) {
             return $this->failNotFound('Notification not found');

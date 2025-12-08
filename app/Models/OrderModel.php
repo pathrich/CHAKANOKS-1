@@ -37,7 +37,7 @@ class OrderModel extends Model
      */
     public function getByBranch($branchId, $status = null)
     {
-        $query = $this->where('branch_id', $branchId)
+        $query = $this->where('orders.branch_id', $branchId)
                       ->select('orders.*, users.full_name as created_by_name, branches.name as branch_name')
                       ->join('users', 'users.id = orders.created_by')
                       ->join('branches', 'branches.id = orders.branch_id');

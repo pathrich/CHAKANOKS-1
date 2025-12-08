@@ -248,7 +248,10 @@ class PurchaseOrder extends BaseController
             }
 
             // Get supply request to find branch
-            $sr = $db->table('supply_requests')->find($po['supply_request_id']);
+            $sr = $db->table('supply_requests')
+                     ->where('id', $po['supply_request_id'])
+                     ->get()
+                     ->getRowArray();
             if (!$sr) {
                 throw new \Exception('Supply request not found');
             }
@@ -328,7 +331,10 @@ class PurchaseOrder extends BaseController
     private function notifyOnShipment($po, $trackingNumber)
     {
         $db = db_connect();
-        $sr = $db->table('supply_requests')->find($po['supply_request_id']);
+        $sr = $db->table('supply_requests')
+                 ->where('id', $po['supply_request_id'])
+                 ->get()
+                 ->getRowArray();
         if ($sr) {
             $manager = $db->table('users')->where('branch_id', $sr['branch_id'])->get()->getRowArray();
             if ($manager) {

@@ -243,14 +243,19 @@ class SupplyRequestModel extends Model
                       ->where('branch_id', $request['branch_id'])
                       ->where('id', '!=', $request['requested_by'])
                       ->select('id')
-                      ->first();
+                      ->get()
+                      ->getRowArray();
 
         if (!$manager) {
             return;
         }
 
         // Get approver name
-        $approver = $db->table('users')->select('full_name')->find($approvedBy);
+        $approver = $db->table('users')
+                 ->select('full_name')
+                 ->where('id', $approvedBy)
+                 ->get()
+                 ->getRowArray();
 
         // Create notification
         $message = sprintf(
@@ -276,7 +281,10 @@ class SupplyRequestModel extends Model
         if (!$supplierId || !$po) return;
 
         $db = $this->db;
-        $supplier = $db->table('suppliers')->find($supplierId);
+        $supplier = $db->table('suppliers')
+                   ->where('id', $supplierId)
+                   ->get()
+                   ->getRowArray();
         if (!$supplier) return;
 
         $message = sprintf("New Purchase Order #%s created. Total items: %d. Please confirm or request changes.", $po['po_number'], $po['total_items']);
@@ -296,7 +304,11 @@ class SupplyRequestModel extends Model
     {
         $db = $this->db;
         // If the request referenced a franchise as destination, try to notify - using branch's manager
-        $branchManager = $db->table('users')->where('branch_id', $request['branch_id'])->select('id')->first();
+        $branchManager = $db->table('users')
+                        ->where('branch_id', $request['branch_id'])
+                        ->select('id')
+                        ->get()
+                        ->getRowArray();
         if ($branchManager) {
             $db->table('notifications')->insert([
                 'recipient_id' => $branchManager['id'],

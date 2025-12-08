@@ -1,0 +1,614 @@
+CRITICAL - 2025-12-08 16:55:54 --> Error: Call to undefined method CodeIgniter\Database\MySQLi\Builder::find()
+[Method: GET, Route: order/create]
+in APPPATH\Controllers\Order.php on line 67.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->create()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 16:55:59 --> Error: Call to undefined method CodeIgniter\Database\MySQLi\Builder::find()
+[Method: GET, Route: order]
+in APPPATH\Controllers\Order.php on line 30.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->index()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 16:58:09 --> Error: Call to undefined method CodeIgniter\Database\MySQLi\Builder::find()
+[Method: GET, Route: order/create]
+in APPPATH\Controllers\Order.php on line 67.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->create()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:07:30 --> Error: Call to undefined method CodeIgniter\Database\MySQLi\Builder::find()
+[Method: GET, Route: order/create]
+in APPPATH\Controllers\Order.php on line 67.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->create()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:10:53 --> Error: Call to undefined method CodeIgniter\Database\MySQLi\Builder::first()
+[Method: GET, Route: order/create]
+in APPPATH\Controllers\Order.php on line 69.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->create()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:10:59 --> Error: Call to undefined method CodeIgniter\Database\MySQLi\Builder::first()
+[Method: GET, Route: order/create]
+in APPPATH\Controllers\Order.php on line 69.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->create()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:12:21 --> Error: Call to undefined method CodeIgniter\Database\MySQLi\Builder::first()
+[Method: GET, Route: order/create]
+in APPPATH\Controllers\Order.php on line 69.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->create()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:13:06 --> Error: Call to undefined method CodeIgniter\Database\MySQLi\Builder::first()
+[Method: GET, Route: order]
+in APPPATH\Controllers\Order.php on line 31.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->index()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:19:18 --> Error: Call to undefined method CodeIgniter\Database\MySQLi\Builder::first()
+[Method: GET, Route: order]
+in APPPATH\Controllers\Order.php on line 31.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->index()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:19:31 --> Error: Call to undefined method CodeIgniter\Database\MySQLi\Builder::first()
+[Method: GET, Route: order/create]
+in APPPATH\Controllers\Order.php on line 69.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->create()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:35:10 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "layouts/app.php"
+[Method: GET, Route: order/create]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('layouts/app.php')
+ 2 SYSTEMPATH\View\View.php(242): CodeIgniter\View\View->render('layouts/app', [], true)
+ 3 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('order/create', [], true)
+ 4 APPPATH\Controllers\Order.php(90): view('order/create', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->create()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-12-08 17:35:22 --> mysqli_sql_exception: Column 'branch_id' in where clause is ambiguous in C:\xampp1\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `orders`...', 0)
+#1 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `orders`...')
+#2 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `orders`...')
+#3 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `orders`...', Array, false)
+#4 C:\xampp1\htdocs\CHAKANOKS-1\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp1\htdocs\CHAKANOKS-1\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp1\htdocs\CHAKANOKS-1\app\Models\OrderModel.php(49): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp1\htdocs\CHAKANOKS-1\app\Controllers\Order.php(39): App\Models\OrderModel->getByBranch('1')
+#8 C:\xampp1\htdocs\CHAKANOKS-1\system\CodeIgniter.php(933): App\Controllers\Order->index()
+#9 C:\xampp1\htdocs\CHAKANOKS-1\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+#10 C:\xampp1\htdocs\CHAKANOKS-1\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp1\htdocs\CHAKANOKS-1\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp1\htdocs\CHAKANOKS-1\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp1\htdocs\CHAKANOKS-1\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2025-12-08 17:35:22 --> CodeIgniter\Database\Exceptions\DatabaseException: Column 'branch_id' in where clause is ambiguous
+[Method: GET, Route: order]
+in SYSTEMPATH\Database\BaseConnection.php on line 684.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `orders`.*, `users`.`full_name` as `created_by_name`, `branches`.`name` as `branch_name`
+FROM `orders`
+JOIN `users` ON `users`.`id` = `orders`.`created_by`
+JOIN `branches` ON `branches`.`id` = `orders`.`branch_id`
+WHERE `branch_id` = :branch_id:
+ORDER BY `orders`.`created_at` DESC', [...], false)
+ 2 SYSTEMPATH\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Models\OrderModel.php(49): CodeIgniter\BaseModel->findAll()
+ 5 APPPATH\Controllers\Order.php(39): App\Models\OrderModel->getByBranch('1')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:35:22 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Column 'branch_id' in where clause is ambiguous
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `orders`.*, `users`.`full_name` as `created_by_name`, `branches`.`name` as `branch_name`
+FROM `orders`
+JOIN `users` ON `users`.`id` = `orders`.`created_by`
+JOIN `branches` ON `branches`.`id` = `orders`.`branch_id`
+WHERE `branch_id` = \'1\'
+ORDER BY `orders`.`created_at` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `orders`.*, `users`.`full_name` as `created_by_name`, `branches`.`name` as `branch_name`
+FROM `orders`
+JOIN `users` ON `users`.`id` = `orders`.`created_by`
+JOIN `branches` ON `branches`.`id` = `orders`.`branch_id`
+WHERE `branch_id` = \'1\'
+ORDER BY `orders`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `orders`.*, `users`.`full_name` as `created_by_name`, `branches`.`name` as `branch_name`
+FROM `orders`
+JOIN `users` ON `users`.`id` = `orders`.`created_by`
+JOIN `branches` ON `branches`.`id` = `orders`.`branch_id`
+WHERE `branch_id` = :branch_id:
+ORDER BY `orders`.`created_at` DESC', [...], false)
+ 4 SYSTEMPATH\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 6 APPPATH\Models\OrderModel.php(49): CodeIgniter\BaseModel->findAll()
+ 7 APPPATH\Controllers\Order.php(39): App\Models\OrderModel->getByBranch('1')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:35:22 --> [Caused by] mysqli_sql_exception: Column 'branch_id' in where clause is ambiguous
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `orders`.*, `users`.`full_name` as `created_by_name`, `branches`.`name` as `branch_name`
+FROM `orders`
+JOIN `users` ON `users`.`id` = `orders`.`created_by`
+JOIN `branches` ON `branches`.`id` = `orders`.`branch_id`
+WHERE `branch_id` = \'1\'
+ORDER BY `orders`.`created_at` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `orders`.*, `users`.`full_name` as `created_by_name`, `branches`.`name` as `branch_name`
+FROM `orders`
+JOIN `users` ON `users`.`id` = `orders`.`created_by`
+JOIN `branches` ON `branches`.`id` = `orders`.`branch_id`
+WHERE `branch_id` = \'1\'
+ORDER BY `orders`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `orders`.*, `users`.`full_name` as `created_by_name`, `branches`.`name` as `branch_name`
+FROM `orders`
+JOIN `users` ON `users`.`id` = `orders`.`created_by`
+JOIN `branches` ON `branches`.`id` = `orders`.`branch_id`
+WHERE `branch_id` = \'1\'
+ORDER BY `orders`.`created_at` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `orders`.*, `users`.`full_name` as `created_by_name`, `branches`.`name` as `branch_name`
+FROM `orders`
+JOIN `users` ON `users`.`id` = `orders`.`created_by`
+JOIN `branches` ON `branches`.`id` = `orders`.`branch_id`
+WHERE `branch_id` = :branch_id:
+ORDER BY `orders`.`created_at` DESC', [...], false)
+ 5 SYSTEMPATH\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 6 SYSTEMPATH\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 7 APPPATH\Models\OrderModel.php(49): CodeIgniter\BaseModel->findAll()
+ 8 APPPATH\Controllers\Order.php(39): App\Models\OrderModel->getByBranch('1')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:37:55 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "layouts/app.php"
+[Method: GET, Route: order]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('layouts/app.php')
+ 2 SYSTEMPATH\View\View.php(242): CodeIgniter\View\View->render('layouts/app', [], true)
+ 3 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('order/manager_dashboard', [], true)
+ 4 APPPATH\Controllers\Order.php(52): view('order/manager_dashboard', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:38:05 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "layouts/app.php"
+[Method: GET, Route: order/create]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('layouts/app.php')
+ 2 SYSTEMPATH\View\View.php(242): CodeIgniter\View\View->render('layouts/app', [], true)
+ 3 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('order/create', [], true)
+ 4 APPPATH\Controllers\Order.php(90): view('order/create', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->create()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 17:38:07 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "layouts/app.php"
+[Method: GET, Route: order/create]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('layouts/app.php')
+ 2 SYSTEMPATH\View\View.php(242): CodeIgniter\View\View->render('layouts/app', [], true)
+ 3 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('order/create', [], true)
+ 4 APPPATH\Controllers\Order.php(90): view('order/create', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->create()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 18:01:53 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "layouts/app.php"
+[Method: GET, Route: order/create]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('layouts/app.php')
+ 2 SYSTEMPATH\View\View.php(242): CodeIgniter\View\View->render('layouts/app', [], true)
+ 3 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('order/create', [], true)
+ 4 APPPATH\Controllers\Order.php(90): view('order/create', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->create()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 18:02:15 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "layouts/app.php"
+[Method: GET, Route: order]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('layouts/app.php')
+ 2 SYSTEMPATH\View\View.php(242): CodeIgniter\View\View->render('layouts/app', [], true)
+ 3 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('order/manager_dashboard', [], true)
+ 4 APPPATH\Controllers\Order.php(52): view('order/manager_dashboard', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Order->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Order))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 18:20:35 --> ErrorException: Cannot redeclare App\Controllers\Order::store()
+[Method: GET, Route: order/create]
+in APPPATH\Controllers\Order.php on line 224.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2025-12-08 18:20:42 --> ErrorException: Cannot redeclare App\Controllers\Order::store()
+[Method: GET, Route: order]
+in APPPATH\Controllers\Order.php on line 224.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2025-12-08 18:20:58 --> ErrorException: Cannot redeclare App\Controllers\Order::store()
+[Method: GET, Route: order/create]
+in APPPATH\Controllers\Order.php on line 224.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2025-12-08 19:06:20 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 19:06:21 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 19:06:22 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 19:07:27 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 19:14:43 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 19:14:51 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-12-08 19:15:47 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`branch_stocks`, CONSTRAINT `branch_stocks_item_id_foreign` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) in C:\xampp1\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `br...', 0)
+#1 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `br...')
+#2 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `br...')
+#3 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseBuilder.php(1841): CodeIgniter\Database\BaseConnection->query('INSERT INTO `br...', NULL, false)
+#4 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseBuilder.php(2230): CodeIgniter\Database\BaseBuilder->batchExecute('_insertBatch', 100)
+#5 C:\xampp1\htdocs\CHAKANOKS-1\app\Database\Seeds\StockSeeder.php(19): CodeIgniter\Database\BaseBuilder->insertBatch(Array)
+#6 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\Seeder.php(149): App\Database\Seeds\StockSeeder->run()
+#7 C:\xampp1\htdocs\CHAKANOKS-1\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#8 C:\xampp1\htdocs\CHAKANOKS-1\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#9 C:\xampp1\htdocs\CHAKANOKS-1\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#10 C:\xampp1\htdocs\CHAKANOKS-1\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#11 C:\xampp1\htdocs\CHAKANOKS-1\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp1\htdocs\CHAKANOKS-1\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+ERROR - 2025-12-08 19:48:42 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`branch_stocks`, CONSTRAINT `branch_stocks_item_id_foreign` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) in C:\xampp1\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `br...', 0)
+#1 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `br...')
+#2 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `br...')
+#3 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseBuilder.php(1841): CodeIgniter\Database\BaseConnection->query('INSERT INTO `br...', NULL, false)
+#4 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\BaseBuilder.php(2230): CodeIgniter\Database\BaseBuilder->batchExecute('_insertBatch', 100)
+#5 C:\xampp1\htdocs\CHAKANOKS-1\app\Database\Seeds\StockSeeder.php(19): CodeIgniter\Database\BaseBuilder->insertBatch(Array)
+#6 C:\xampp1\htdocs\CHAKANOKS-1\system\Database\Seeder.php(149): App\Database\Seeds\StockSeeder->run()
+#7 C:\xampp1\htdocs\CHAKANOKS-1\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#8 C:\xampp1\htdocs\CHAKANOKS-1\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#9 C:\xampp1\htdocs\CHAKANOKS-1\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#10 C:\xampp1\htdocs\CHAKANOKS-1\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#11 C:\xampp1\htdocs\CHAKANOKS-1\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp1\htdocs\CHAKANOKS-1\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+CRITICAL - 2025-12-08 20:08:55 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:09:07 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:12:59 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:13:35 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:16:49 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:16:55 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:17:27 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:27:21 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:28:52 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:41:53 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:41:56 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:41:56 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:42:08 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-08 20:42:16 --> ErrorException: Undefined variable $totalStock
+[Method: GET, Route: dashboard]
+in APPPATH\Views\dashboard\admin.php on line 180.
+ 1 APPPATH\Views\dashboard\admin.php(180): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $totalStock', 'C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php', 180)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp1\\htdocs\\CHAKANOKS-1\\app\\Views\\dashboard\\admin.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('dashboard/admin', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(86): view('dashboard/admin', [...])
+ 6 APPPATH\Controllers\Dashboard.php(22): App\Controllers\Dashboard->adminDashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

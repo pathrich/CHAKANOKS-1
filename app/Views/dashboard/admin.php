@@ -176,6 +176,10 @@ $title = 'Admin Dashboard';
                 <div class="value"><?= $totalItems ?></div>
             </div>
             <div class="stat-card">
+                <h3>Total Stock</h3>
+                <div class="value"><?= $totalStock ?></div>
+            </div>
+            <div class="stat-card">
                 <h3>Categories</h3>
                 <div class="value"><?= $totalCategories ?></div>
             </div>

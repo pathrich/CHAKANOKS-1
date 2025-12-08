@@ -29,12 +29,12 @@ $routes->get('order', 'Order::index', ['filter' => 'auth']);
 $routes->get('order/create', 'Order::create', ['filter' => 'auth']);
 $routes->post('order/store', 'Order::store', ['filter' => 'auth']);
 $routes->post('order/submit', 'Order::submit', ['filter' => 'auth']);
-$routes->post('order/approve', 'Order::approve', ['filter' => 'auth']);
+$routes->post('order/approve', 'Order::approve', ['filter' => 'role:central_admin,system_admin']);
 $routes->post('order/cancel', 'Order::cancel', ['filter' => 'auth']);
-$routes->get('order/pending', 'Order::pending', ['filter' => 'auth']);
+$routes->get('order/pending', 'Order::pending', ['filter' => 'role:central_admin,system_admin']);
 
 // API Routes
-$routes->get('api/items', 'Api\Items::list', ['filter' => 'auth']);
+$routes->get('api/items', 'Api\Items::index', ['filter' => 'auth']);
 $routes->get('api/notifications', 'Api\Notifications::list', ['filter' => 'auth']);
 $routes->post('api/notifications/(:num)/read', 'Api\Notifications::markRead/$1', ['filter' => 'auth']);
 
