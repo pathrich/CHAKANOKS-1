@@ -20,7 +20,7 @@ CI_ENVIRONMENT = development
 # APP
 #--------------------------------------------------------------------
 
-app.baseURL = 'http://localhost/UARYMAN/'
+app.baseURL = 'http://localhost/CHAKANOKS-1/'
 app.indexPage = ''
 app.forceGlobalSecureRequests = false
 # If you have trouble with `.`, you could also use `_`.
@@ -33,7 +33,7 @@ app.forceGlobalSecureRequests = false
 #--------------------------------------------------------------------
 
 database.default.hostname = localhost
-database.default.database = uaryman
+database.default.database = chakanoks_db
 database.default.username = root
 database.default.password = 
 database.default.DBDriver = MySQLi

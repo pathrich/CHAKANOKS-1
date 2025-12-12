@@ -9,6 +9,11 @@ class Items extends Controller
 {
     use ResponseTrait;
 
+    public function index()
+    {
+        return $this->list();
+    }
+
     /**
      * Get list of all items
      */

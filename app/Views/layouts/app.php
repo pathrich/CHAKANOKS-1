@@ -134,7 +134,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/dashboard">
+            <a class="navbar-brand" href="<?= site_url('dashboard') ?>">
                 <i class="fas fa-boxes"></i> CHAKANOKS
             </a>
 
@@ -148,9 +148,9 @@
                         <i class="fas fa-user"></i> <?= session('user_full_name') ?? 'User' ?>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/profile"><i class="fas fa-user-edit"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="<?= site_url('dashboard') ?>"><i class="fas fa-user-edit"></i> Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        <li><a class="dropdown-item" href="<?= site_url('logout') ?>"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -162,45 +162,48 @@
             <!-- Sidebar -->
             <div class="col-lg-2 px-0 sidebar d-lg-block" id="sidebar">
                 <nav class="nav flex-column py-3">
-                    <a class="nav-link" href="/dashboard">
+                    <a class="nav-link" href="<?= site_url('dashboard') ?>">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
 
                     <?php if (in_array(session('user_role'), ['branch_manager', 'inventory_staff'])): ?>
-                        <a class="nav-link" href="/order">
+                        <a class="nav-link" href="<?= site_url('order') ?>">
                             <i class="fas fa-shopping-cart"></i> Orders
                         </a>
-                        <a class="nav-link" href="/inventory">
+                        <a class="nav-link" href="<?= site_url('inventory') ?>">
                             <i class="fas fa-warehouse"></i> Inventory
                         </a>
-                    <?php endif; ?>
-
-                    <?php if (in_array(session('user_role'), ['supplier', 'franchise'])): ?>
-                        <a class="nav-link" href="/purchase-order">
-                            <i class="fas fa-truck"></i> Purchase Orders
-                        </a>
-                    <?php endif; ?>
-
-                    <?php if (session('user_role') === 'supplier'): ?>
-                        <a class="nav-link" href="/supply-request">
+                        <a class="nav-link" href="<?= site_url('supply-request/create') ?>">
                             <i class="fas fa-clipboard-list"></i> Supply Requests
                         </a>
                     <?php endif; ?>
 
                     <?php if (session('user_role') === 'logistics_coordinator'): ?>
-                        <a class="nav-link" href="/deliveries">
+                        <a class="nav-link" href="<?= site_url('deliveries') ?>">
                             <i class="fas fa-shipping-fast"></i> Deliveries
                         </a>
                     <?php endif; ?>
 
+                    <?php if (session('user_role') === 'supplier'): ?>
+                        <a class="nav-link" href="<?= site_url('purchase-order/supplier') ?>">
+                            <i class="fas fa-truck"></i> Purchase Orders
+                        </a>
+                    <?php endif; ?>
+
                     <?php if (in_array(session('user_role'), ['central_admin', 'system_admin'])): ?>
-                        <a class="nav-link" href="/order/pending">
+                        <a class="nav-link" href="<?= site_url('order/pending') ?>">
                             <i class="fas fa-clock"></i> Pending Orders
                         </a>
-                        <a class="nav-link" href="/supply-request/admin">
+                        <a class="nav-link" href="<?= site_url('supply-request') ?>">
                             <i class="fas fa-tasks"></i> Supply Requests
                         </a>
-                        <a class="nav-link" href="/system-admin">
+                        <a class="nav-link" href="<?= site_url('purchase-order') ?>">
+                            <i class="fas fa-truck"></i> Purchase Orders
+                        </a>
+                        <a class="nav-link" href="<?= site_url('inventory') ?>">
+                            <i class="fas fa-warehouse"></i> Inventory
+                        </a>
+                        <a class="nav-link" href="<?= site_url('system-admin') ?>">
                             <i class="fas fa-cogs"></i> System Admin
                         </a>
                     <?php endif; ?>

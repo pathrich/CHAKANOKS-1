@@ -2,197 +2,70 @@
 $title = 'Supplier Dashboard';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?></title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-        }
-        
-        .navbar {
-            background-color: #16a085;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .navbar h1 {
-            font-size: 1.5rem;
-        }
-        
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin-left: 2rem;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            background-color: #e74c3c;
-            transition: background-color 0.3s;
-        }
-        
-        .navbar a:hover {
-            background-color: #c0392b;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        
-        h2 {
-            color: #16a085;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-        
-        h3 {
-            color: #16a085;
-            margin: 1.5rem 0 1rem 0;
-            font-size: 1.3rem;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-left: 4px solid #16a085;
-        }
-        
-        .stat-card h3 {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-            color: inherit;
-        }
-        
-        .stat-card .value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #16a085;
-        }
-        
-        .section {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        
-        table th {
-            background-color: #16a085;
-            color: white;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-        }
-        
-        table td {
-            padding: 1rem;
-            border-bottom: 1px solid #ecf0f1;
-        }
-        
-        table tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .empty-message {
-            text-align: center;
-            color: #95a5a6;
-            padding: 2rem;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <h1><?= $title ?></h1>
-        <div class="nav-links">
-            <a href="<?= site_url('inventory') ?>">Inventory</a>
-            <a href="<?= site_url('logout') ?>">Logout</a>
+<?= $this->extend('layouts/app') ?>
+
+<?= $this->section('content') ?>
+
+<div class="container-fluid">
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
+        <div>
+            <h1 class="h3 mb-1"><?= esc($title) ?></h1>
+            <div class="text-muted">Welcome back, <?= esc(session('user_full_name') ?? 'Supplier') ?>!</div>
         </div>
-    </nav>
+    </div>
 
-    <div class="container">
-        <h2>Welcome back, <?= session('user_full_name') ?? 'Supplier' ?>!</h2>
-
-        <!-- Statistics Cards -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Total Items</h3>
-                <div class="value"><?= $totalItems ?? 0 ?></div>
-            </div>
-            <div class="stat-card">
-                <h3>Recent Activities</h3>
-                <div class="value"><?= !empty($recentActivity) ? count($recentActivity) : 0 ?></div>
-            </div>
-        </div>
-
-        <!-- Recent Activity Section -->
-        <div class="section">
-            <h3>Recent Activity</h3>
-            <?php if (!empty($recentActivity)): ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Action</th>
-                            <th>Details</th>
-                            <th>Date/Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($recentActivity as $log): ?>
-                            <tr>
-                                <td><?= esc($log['full_name'] ?? 'N/A') ?></td>
-                                <td><?= esc($log['action']) ?></td>
-                                <td><?= esc($log['details'] ?? '-') ?></td>
-                                <td><?= $log['created_at'] ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <div class="empty-message">
-                    <p>No recent activity logged yet.</p>
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase">Total Items</div>
+                    <div class="fs-3 fw-bold"><?= (int) ($totalItems ?? 0) ?></div>
                 </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase">Recent Activities</div>
+                    <div class="fs-3 fw-bold"><?= (int) (!empty($recentActivity) ? count($recentActivity) : 0) ?></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-white">
+            <h5 class="mb-0">Recent Activity</h5>
+        </div>
+        <div class="card-body">
+            <?php if (!empty($recentActivity)): ?>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                                <th>Date/Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($recentActivity as $log): ?>
+                                <tr>
+                                    <td><?= esc($log['full_name'] ?? 'N/A') ?></td>
+                                    <td><?= esc($log['action']) ?></td>
+                                    <td><?= esc($log['details'] ?? '-') ?></td>
+                                    <td><?= esc($log['created_at']) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php else: ?>
+                <div class="text-muted">No recent activity logged yet.</div>
             <?php endif; ?>
         </div>
     </div>
-</body>
-</html>
+</div>
+
+<?= $this->endSection() ?>

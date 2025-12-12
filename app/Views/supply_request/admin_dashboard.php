@@ -180,7 +180,7 @@ document.querySelectorAll('.approve-btn').forEach(btn => {
 document.getElementById('confirmApproveBtn').addEventListener('click', function() {
     const notes = document.getElementById('approvalNotes').value;
     
-    fetch('/supply-request/approve', {
+    fetch('<?= site_url('supply-request/approve') ?>', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -227,7 +227,7 @@ document.getElementById('confirmRejectBtn').addEventListener('click', function()
         return;
     }
     
-    fetch('/supply-request/reject', {
+    fetch('<?= site_url('supply-request/reject') ?>', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -253,6 +253,76 @@ document.getElementById('confirmRejectBtn').addEventListener('click', function()
     });
 
     bootstrap.Modal.getInstance(document.getElementById('rejectModal')).hide();
+});
+
+// All Requests tab loader
+let allRequestsLoaded = false;
+async function loadAllRequests() {
+    const container = document.getElementById('all-requests-container');
+    container.innerHTML = '<p class="text-muted">Loading...</p>';
+
+    try {
+        const res = await fetch('<?= site_url('supply-request/all') ?>', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        const data = await res.json();
+        if (!data.success) {
+            container.innerHTML = `<div class="alert alert-danger">${data.error || 'Failed to load requests'}</div>`;
+            return;
+        }
+
+        const requests = data.requests || [];
+        if (requests.length === 0) {
+            container.innerHTML = '<div class="alert alert-info">No supply requests found.</div>';
+            return;
+        }
+
+        let html = '<div class="table-responsive">';
+        html += '<table class="table table-hover align-middle">';
+        html += '<thead class="table-light"><tr>';
+        html += '<th>Request #</th><th>Branch</th><th>Requested By</th><th>Status</th><th>Items</th><th>Created</th>';
+        html += '</tr></thead><tbody>';
+
+        requests.forEach(r => {
+            const created = r.created_at ? new Date(r.created_at).toLocaleString() : '';
+            const itemCount = (r.items || []).length;
+            html += `<tr>`;
+            html += `<td><strong>#${r.id}</strong></td>`;
+            html += `<td>${escapeHtml(r.branch_name || '')}</td>`;
+            html += `<td>${escapeHtml(r.requester_name || '')}</td>`;
+            html += `<td><span class="badge bg-${statusColor(r.status)}">${escapeHtml(r.status || '')}</span></td>`;
+            html += `<td>${itemCount}</td>`;
+            html += `<td>${created}</td>`;
+            html += `</tr>`;
+        });
+
+        html += '</tbody></table></div>';
+        container.innerHTML = html;
+        allRequestsLoaded = true;
+    } catch (e) {
+        console.error(e);
+        container.innerHTML = '<div class="alert alert-danger">Failed to load requests (network/server error).</div>';
+    }
+}
+
+function statusColor(status) {
+    const map = { Pending: 'warning', Approved: 'success', Rejected: 'danger', Fulfilled: 'info' };
+    return map[status] || 'secondary';
+}
+
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+document.getElementById('all-tab').addEventListener('shown.bs.tab', function() {
+    if (!allRequestsLoaded) {
+        loadAllRequests();
+    }
 });
 </script>
 

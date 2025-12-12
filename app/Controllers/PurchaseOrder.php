@@ -16,6 +16,37 @@ class PurchaseOrder extends BaseController
         $this->auditModel = new AuditLogModel();
     }
 
+    private function getSupplierIdForCurrentUser(): ?int
+    {
+        $userId = (int) session('user_id');
+        if ($userId <= 0) {
+            return null;
+        }
+
+        $db = db_connect();
+        if (! $db->tableExists('user_suppliers')) {
+            return null;
+        }
+
+        $row = $db->table('user_suppliers')->select('supplier_id')->where('user_id', $userId)->get()->getRowArray();
+        return $row ? (int) $row['supplier_id'] : null;
+    }
+
+    private function logActivity(string $action, array $details = []): void
+    {
+        $db = db_connect();
+        if (! $db->tableExists('activity_logs')) {
+            return;
+        }
+
+        $db->table('activity_logs')->insert([
+            'user_id' => session('user_id') ?: null,
+            'action' => $action,
+            'details' => json_encode($details),
+            'created_at' => gmdate('Y-m-d H:i:s'),
+        ]);
+    }
+
     /**
      * List all POs for admin review / supplier to action
      */
@@ -41,6 +72,75 @@ class PurchaseOrder extends BaseController
         return view('purchase_order/admin_dashboard', $data);
     }
 
+    public function supplierPortal()
+    {
+        if (!session('user_id')) {
+            return redirect()->to(site_url('login'));
+        }
+
+        $roles = $this->getUserRoles();
+        if (!in_array('supplier', $roles, true)) {
+            return $this->response->setStatusCode(403)->setBody('Access denied');
+        }
+
+        $supplierId = $this->getSupplierIdForCurrentUser();
+        if (!$supplierId) {
+            return $this->response->setStatusCode(403)->setBody('Supplier account not linked. Please contact administrator.');
+        }
+
+        return view('purchase_order/supplier_dashboard', ['title' => 'Supplier Dashboard']);
+    }
+
+    public function supplierList()
+    {
+        if (!session('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
+        }
+
+        $roles = $this->getUserRoles();
+        if (!in_array('supplier', $roles, true)) {
+            return $this->response->setStatusCode(403)->setJSON(['error' => 'Access denied']);
+        }
+
+        $supplierId = $this->getSupplierIdForCurrentUser();
+        if (!$supplierId) {
+            return $this->response->setStatusCode(403)->setJSON(['error' => 'Supplier account not linked']);
+        }
+
+        $db = db_connect();
+        $pos = $db->table('purchase_orders')
+            ->select('id, po_number, total_items, total_amount, status, created_at, tracking_number')
+            ->where('supplier_id', $supplierId)
+            ->orderBy('created_at', 'DESC')
+            ->get()->getResultArray();
+
+        $counts = [
+            'awaiting_response' => 0,
+            'confirmed' => 0,
+            'shipped' => 0,
+            'declined' => 0,
+        ];
+
+        foreach ($pos as $po) {
+            if ($po['status'] === 'PO_CREATED') {
+                $counts['awaiting_response']++;
+            } elseif ($po['status'] === 'SUPPLIER_CONFIRMED') {
+                $counts['confirmed']++;
+            } elseif ($po['status'] === 'SHIPPED') {
+                $counts['shipped']++;
+            } elseif ($po['status'] === 'SUPPLIER_DECLINED') {
+                $counts['declined']++;
+            }
+        }
+
+        return $this->response->setJSON([
+            'success' => true,
+            'supplier_id' => $supplierId,
+            'counts' => $counts,
+            'purchase_orders' => $pos,
+        ]);
+    }
+
     /**
      * Supplier confirms/accepts a PO (status becomes SUPPLIER_CONFIRMED)
      * POST: po_id, supplier_id, confirmation_notes (optional)
@@ -52,11 +152,12 @@ class PurchaseOrder extends BaseController
         }
 
         $poId = (int)$this->request->getJSON()->po_id ?? 0;
-        $supplierId = (int)$this->request->getJSON()->supplier_id ?? 0;
         $notes = $this->request->getJSON()->notes ?? null;
 
+        $supplierId = $this->getSupplierIdForCurrentUser();
+
         if (!$poId || !$supplierId) {
-            return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid PO or supplier ID']);
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid PO or supplier']);
         }
 
         try {
@@ -75,9 +176,15 @@ class PurchaseOrder extends BaseController
             $this->auditModel->log(
                 'supplier_confirmed_po',
                 'Supplier ' . $supplierId . ' confirmed PO ' . $poId . '. Notes: ' . $notes,
-                null,
+                session('user_id'),
                 'supplier'
             );
+
+            $this->logActivity('po_supplier_confirm', [
+                'po_id' => $poId,
+                'supplier_id' => $supplierId,
+                'notes' => $notes,
+            ]);
 
             // Notify admin and manager
             $this->notifyOnSupplierAction($po, 'CONFIRMED', $notes);
@@ -99,8 +206,9 @@ class PurchaseOrder extends BaseController
         }
 
         $poId = (int)$this->request->getJSON()->po_id ?? 0;
-        $supplierId = (int)$this->request->getJSON()->supplier_id ?? 0;
         $reason = $this->request->getJSON()->reason ?? '';
+
+        $supplierId = $this->getSupplierIdForCurrentUser();
 
         if (!$poId || !$supplierId || !$reason) {
             return $this->response->setStatusCode(400)->setJSON(['error' => 'Missing required fields']);
@@ -109,8 +217,8 @@ class PurchaseOrder extends BaseController
         try {
             $db = db_connect();
             $po = $this->poModel->find($poId);
-            if (!$po) {
-                throw new \Exception('PO not found');
+            if (!$po || $po['supplier_id'] != $supplierId) {
+                throw new \Exception('PO not found or supplier mismatch');
             }
 
             $db->table('purchase_orders')->update(
@@ -121,9 +229,15 @@ class PurchaseOrder extends BaseController
             $this->auditModel->log(
                 'supplier_requested_changes_on_po',
                 'PO ' . $poId . ' reason: ' . $reason,
-                null,
+                session('user_id'),
                 'supplier'
             );
+
+            $this->logActivity('po_supplier_request_changes', [
+                'po_id' => $poId,
+                'supplier_id' => $supplierId,
+                'reason' => $reason,
+            ]);
 
             $this->notifyOnSupplierAction($po, 'REQUEST_CHANGES', $reason);
 
@@ -144,8 +258,9 @@ class PurchaseOrder extends BaseController
         }
 
         $poId = (int)$this->request->getJSON()->po_id ?? 0;
-        $supplierId = (int)$this->request->getJSON()->supplier_id ?? 0;
         $reason = $this->request->getJSON()->reason ?? '';
+
+        $supplierId = $this->getSupplierIdForCurrentUser();
 
         if (!$poId || !$supplierId) {
             return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid PO or supplier']);
@@ -154,8 +269,8 @@ class PurchaseOrder extends BaseController
         try {
             $db = db_connect();
             $po = $this->poModel->find($poId);
-            if (!$po) {
-                throw new \Exception('PO not found');
+            if (!$po || (int)($po['supplier_id'] ?? 0) !== (int)$supplierId) {
+                throw new \Exception('PO not found or supplier mismatch');
             }
 
             $db->table('purchase_orders')->update(
@@ -166,9 +281,15 @@ class PurchaseOrder extends BaseController
             $this->auditModel->log(
                 'supplier_declined_po',
                 'PO ' . $poId . ' reason: ' . $reason,
-                null,
+                session('user_id'),
                 'supplier'
             );
+
+            $this->logActivity('po_supplier_decline', [
+                'po_id' => $poId,
+                'supplier_id' => $supplierId,
+                'reason' => $reason,
+            ]);
 
             $this->notifyOnSupplierAction($po, 'DECLINED', $reason);
 
@@ -197,9 +318,10 @@ class PurchaseOrder extends BaseController
 
         try {
             $db = db_connect();
+            $supplierId = $this->getSupplierIdForCurrentUser();
             $po = $this->poModel->find($poId);
-            if (!$po) {
-                throw new \Exception('PO not found');
+            if (!$po || !$supplierId || (int)($po['supplier_id'] ?? 0) !== (int)$supplierId) {
+                throw new \Exception('PO not found or supplier mismatch');
             }
 
             $db->table('purchase_orders')->update(
@@ -213,6 +335,12 @@ class PurchaseOrder extends BaseController
                 session('user_id'),
                 'supplier'
             );
+
+            $this->logActivity('po_supplier_ship', [
+                'po_id' => $poId,
+                'supplier_id' => $supplierId,
+                'tracking_number' => $trackingNumber,
+            ]);
 
             $this->notifyOnShipment($po, $trackingNumber);
 

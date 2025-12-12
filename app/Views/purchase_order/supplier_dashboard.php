@@ -207,38 +207,44 @@ $title = 'Supplier Dashboard';
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Mock data for demo - in real app this would come from your server
-        const mockPOs = [
-            { id: 1, po_number: 'PO-20251207-0001', total_items: 5, total_amount: 1500.00, status: 'PO_CREATED', created_at: '2025-12-07 10:00:00' },
-            { id: 2, po_number: 'PO-20251207-0002', total_items: 3, total_amount: 800.00, status: 'SUPPLIER_CONFIRMED', created_at: '2025-12-07 09:00:00' },
-        ];
+        let currentPOs = [];
 
-        function loadPOs() {
+        function statusMeta(status) {
+            const text = (status || '').replace(/_/g, ' ');
+            let klass = 'status-pending';
+            if (status === 'SUPPLIER_CONFIRMED') klass = 'status-confirmed';
+            if (status === 'SHIPPED') klass = 'status-shipped';
+            return { text, klass };
+        }
+
+        async function loadPOs() {
             const tbody = document.querySelector('#poTable tbody');
+            tbody.innerHTML = '<tr><td colspan="6" class="text-muted">Loading...</td></tr>';
+
+            const res = await fetch('<?= site_url('purchase-order/supplier/pos') ?>');
+            const data = await res.json();
+            if (!data.success) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-danger">${data.error || 'Failed to load purchase orders'}</td></tr>`;
+                return;
+            }
+
+            currentPOs = data.purchase_orders || [];
+            document.getElementById('pendingCount').textContent = data.counts?.awaiting_response ?? 0;
+            document.getElementById('confirmedCount').textContent = data.counts?.confirmed ?? 0;
+            document.getElementById('shippedCount').textContent = data.counts?.shipped ?? 0;
+            document.getElementById('declinedCount').textContent = data.counts?.declined ?? 0;
+
             tbody.innerHTML = '';
-            
-            let pendingCount = 0, confirmedCount = 0, shippedCount = 0, declinedCount = 0;
+            if (currentPOs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-muted">No purchase orders found.</td></tr>';
+                return;
+            }
 
-            mockPOs.forEach(po => {
+            currentPOs.forEach(po => {
                 const row = document.createElement('tr');
-                
-                let statusClass = 'status-pending';
-                let statusText = po.status.replace(/_/g, ' ');
-
-                if (po.status === 'SUPPLIER_CONFIRMED') {
-                    statusClass = 'status-confirmed';
-                    confirmedCount++;
-                } else if (po.status === 'SHIPPED') {
-                    statusClass = 'status-shipped';
-                    shippedCount++;
-                } else if (po.status === 'SUPPLIER_DECLINED') {
-                    declinedCount++;
-                } else {
-                    pendingCount++;
-                }
+                const meta = statusMeta(po.status);
 
                 let actionsHTML = `<div class="btn-group btn-group-sm" role="group">`;
-                
                 if (po.status === 'PO_CREATED') {
                     actionsHTML += `
                         <button class="btn btn-success" onclick="showAcceptModal(${po.id})">Accept</button>
@@ -250,7 +256,6 @@ $title = 'Supplier Dashboard';
                         <button class="btn btn-info" onclick="showShipModal(${po.id})">Ship</button>
                     `;
                 }
-
                 actionsHTML += `
                     <button class="btn btn-outline-primary" onclick="viewDetails(${po.id})">Details</button>
                 </div>`;
@@ -258,19 +263,13 @@ $title = 'Supplier Dashboard';
                 row.innerHTML = `
                     <td><strong>${po.po_number}</strong></td>
                     <td>${po.total_items}</td>
-                    <td>$${po.total_amount.toFixed(2)}</td>
-                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>₱${parseFloat(po.total_amount || 0).toFixed(2)}</td>
+                    <td><span class="status-badge ${meta.klass}">${meta.text}</span></td>
                     <td>${new Date(po.created_at).toLocaleString()}</td>
                     <td>${actionsHTML}</td>
                 `;
-
                 tbody.appendChild(row);
             });
-
-            document.getElementById('pendingCount').textContent = pendingCount;
-            document.getElementById('confirmedCount').textContent = confirmedCount;
-            document.getElementById('shippedCount').textContent = shippedCount;
-            document.getElementById('declinedCount').textContent = declinedCount;
         }
 
         function showAcceptModal(poId) {
@@ -287,8 +286,8 @@ $title = 'Supplier Dashboard';
             
             fetch('<?= site_url('purchase-order/supplier-accept') ?>', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ po_id: parseInt(poId), supplier_id: 1, notes: notes })
+                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                body: JSON.stringify({ po_id: parseInt(poId), notes: notes })
             })
             .then(res => res.json())
             .then(data => {
@@ -317,8 +316,8 @@ $title = 'Supplier Dashboard';
 
             fetch('<?= site_url('purchase-order/supplier-request-changes') ?>', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ po_id: parseInt(poId), supplier_id: 1, reason: reason })
+                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                body: JSON.stringify({ po_id: parseInt(poId), reason: reason })
             })
             .then(res => res.json())
             .then(data => {
@@ -346,8 +345,8 @@ $title = 'Supplier Dashboard';
 
             fetch('<?= site_url('purchase-order/supplier-decline') ?>', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ po_id: parseInt(poId), supplier_id: 1, reason: reason })
+                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                body: JSON.stringify({ po_id: parseInt(poId), reason: reason })
             })
             .then(res => res.json())
             .then(data => {
@@ -375,7 +374,7 @@ $title = 'Supplier Dashboard';
 
             fetch('<?= site_url('purchase-order/supplier-ship') ?>', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
                 body: JSON.stringify({ po_id: parseInt(poId), tracking_number: tracking })
             })
             .then(res => res.json())
@@ -391,7 +390,7 @@ $title = 'Supplier Dashboard';
         }
 
         function viewDetails(poId) {
-            const po = mockPOs.find(p => p.id === poId);
+            const po = currentPOs.find(p => p.id === poId);
             if (po) {
                 alert('PO Details:\n' + JSON.stringify(po, null, 2));
             }

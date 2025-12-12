@@ -12,15 +12,17 @@ $routes->get('logout', 'Auth::logout');
 
 $routes->get('dashboard', 'Dashboard::index', ['filter' => 'auth']);
 
-$routes->get('inventory', 'Inventory::index', ['filter' => 'role:inventory_staff']);
-$routes->post('inventory/receive', 'Inventory::receive', ['filter' => 'role:inventory_staff']);
-$routes->post('inventory/adjust', 'Inventory::adjust', ['filter' => 'role:inventory_staff']);
+$routes->get('inventory', 'Inventory::index', ['filter' => 'role:inventory_staff,central_admin,system_admin']);
+$routes->post('inventory/receive', 'Inventory::receive', ['filter' => 'role:inventory_staff,central_admin,system_admin']);
+$routes->post('inventory/adjust', 'Inventory::adjust', ['filter' => 'role:inventory_staff,central_admin,system_admin']);
 
 // Supply Request Routes
 $routes->get('supply-request', 'SupplyRequest::index', ['filter' => 'auth']);
+$routes->get('supply-request/create', 'SupplyRequest::create', ['filter' => 'role:branch_manager,inventory_staff']);
 $routes->post('supply-request/submit', 'SupplyRequest::submit', ['filter' => 'auth']);
 $routes->post('supply-request/approve', 'SupplyRequest::approve', ['filter' => 'auth']);
 $routes->post('supply-request/reject', 'SupplyRequest::reject', ['filter' => 'auth']);
+$routes->get('supply-request/all', 'SupplyRequest::allRequests', ['filter' => 'role:central_admin,system_admin']);
 $routes->get('supply-request/pending-count', 'SupplyRequest::getPendingCount', ['filter' => 'auth']);
 $routes->get('supply-request/my-requests', 'SupplyRequest::myRequests', ['filter' => 'auth']);
 
@@ -40,11 +42,13 @@ $routes->post('api/notifications/(:num)/read', 'Api\Notifications::markRead/$1',
 
 // Purchase Order Routes
 $routes->get('purchase-order', 'PurchaseOrder::index', ['filter' => 'auth']);
-$routes->post('purchase-order/supplier-accept', 'PurchaseOrder::supplierAccept', ['filter' => 'auth']);
-$routes->post('purchase-order/supplier-request-changes', 'PurchaseOrder::supplierRequestChanges', ['filter' => 'auth']);
-$routes->post('purchase-order/supplier-decline', 'PurchaseOrder::supplierDecline', ['filter' => 'auth']);
-$routes->post('purchase-order/supplier-ship', 'PurchaseOrder::supplierShip', ['filter' => 'auth']);
-$routes->post('purchase-order/mark-delivered', 'PurchaseOrder::markDelivered', ['filter' => 'auth']);
+$routes->get('purchase-order/supplier', 'PurchaseOrder::supplierPortal', ['filter' => 'role:supplier']);
+$routes->get('purchase-order/supplier/pos', 'PurchaseOrder::supplierList', ['filter' => 'role:supplier']);
+$routes->post('purchase-order/supplier-accept', 'PurchaseOrder::supplierAccept', ['filter' => 'role:supplier']);
+$routes->post('purchase-order/supplier-request-changes', 'PurchaseOrder::supplierRequestChanges', ['filter' => 'role:supplier']);
+$routes->post('purchase-order/supplier-decline', 'PurchaseOrder::supplierDecline', ['filter' => 'role:supplier']);
+$routes->post('purchase-order/supplier-ship', 'PurchaseOrder::supplierShip', ['filter' => 'role:supplier']);
+$routes->post('purchase-order/mark-delivered', 'PurchaseOrder::markDelivered', ['filter' => 'role:central_admin,system_admin']);
 // Delivery / Logistics routes (logistics_coordinator only)
 $routes->get('deliveries', 'Delivery::index', ['filter' => 'role:logistics_coordinator']);
 $routes->get('deliveries/create', 'Delivery::create', ['filter' => 'role:logistics_coordinator']);
