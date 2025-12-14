@@ -188,30 +188,8 @@
                         <a class="nav-link" href="<?= site_url('inventory') ?>">
                             <i class="fas fa-warehouse"></i> Inventory
                         </a>
-<<<<<<< HEAD
-                        <a class="nav-link" href="/transfers/my">
-                            <i class="fas fa-exchange-alt"></i> My Transfers
-                        </a>
-                    <?php endif; ?>
-
-                    <?php if (in_array(session('user_role'), ['supplier', 'franchise'])): ?>
-                        <a class="nav-link" href="/purchase-order">
-                            <i class="fas fa-truck"></i> Purchase Orders
-                        </a>
-                    <?php endif; ?>
-
-                    <?php if (session('user_role') === 'supplier'): ?>
-                        <a class="nav-link" href="/supply-request">
-=======
                         <a class="nav-link" href="<?= site_url('supply-request/create') ?>">
->>>>>>> 7b34fa832e84a49ca2de74d7a657b36ec355deaf
                             <i class="fas fa-clipboard-list"></i> Supply Requests
-                        </a>
-                    <?php endif; ?>
-
-                    <?php if (session('user_role') === 'logistics_coordinator'): ?>
-                        <a class="nav-link" href="<?= site_url('deliveries') ?>">
-                            <i class="fas fa-shipping-fast"></i> Deliveries
                         </a>
                     <?php endif; ?>
 
@@ -228,15 +206,6 @@
                         <a class="nav-link" href="<?= site_url('supply-request') ?>">
                             <i class="fas fa-tasks"></i> Supply Requests
                         </a>
-<<<<<<< HEAD
-                        <a class="nav-link" href="/transfers">
-                            <i class="fas fa-exchange-alt"></i> Transfers
-                        </a>
-                        <a class="nav-link" href="/items">
-                            <i class="fas fa-box"></i> Items
-                        </a>
-                        <a class="nav-link" href="/system-admin">
-=======
                         <a class="nav-link" href="<?= site_url('purchase-order') ?>">
                             <i class="fas fa-truck"></i> Purchase Orders
                         </a>
@@ -244,7 +213,6 @@
                             <i class="fas fa-warehouse"></i> Inventory
                         </a>
                         <a class="nav-link" href="<?= site_url('system-admin') ?>">
->>>>>>> 7b34fa832e84a49ca2de74d7a657b36ec355deaf
                             <i class="fas fa-cogs"></i> System Admin
                         </a>
                     <?php endif; ?>

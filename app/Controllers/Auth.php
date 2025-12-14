@@ -33,13 +33,6 @@ class Auth extends Controller
 
             $userRoles = array_map(fn($r) => $r['name'], $roles);
 
-<<<<<<< HEAD
-            // Store all roles and an active role in session for role-based UI and switching
-            session()->set('user_roles', $userRoles);
-            if (! session()->has('user_role') && ! empty($userRoles)) {
-                session()->set('user_role', $userRoles[0]);
-            }
-=======
             session()->set('user_roles', $userRoles);
             $primaryRole = null;
             foreach (['system_admin', 'central_admin', 'branch_manager', 'inventory_staff', 'supplier', 'franchise', 'logistics_coordinator'] as $candidate) {
@@ -48,11 +41,10 @@ class Auth extends Controller
                     break;
                 }
             }
-            if ($primaryRole === null && !empty($userRoles)) {
+            if ($primaryRole === null && ! empty($userRoles)) {
                 $primaryRole = $userRoles[0];
             }
             session()->set('user_role', $primaryRole);
->>>>>>> 7b34fa832e84a49ca2de74d7a657b36ec355deaf
 
             // Redirect based on role
             if (in_array('logistics_coordinator', $userRoles, true)) {
