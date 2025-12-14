@@ -9,9 +9,9 @@ class ItemSeeder extends Seeder
     public function run()
     {
         $items = [
-            [ 'name' => 'Organic Apples', 'sku' => 'SKU-APP-001', 'barcode' => '1234567890123', 'category_id' => 1, 'perishable' => 1, 'min_stock' => 50 ],
-            [ 'name' => 'Ground Beef', 'sku' => 'SKU-BEF-001', 'barcode' => '2234567890123', 'category_id' => 2, 'perishable' => 1, 'min_stock' => 30 ],
-            [ 'name' => 'Whole Milk', 'sku' => 'SKU-MLK-001', 'barcode' => '3234567890123', 'category_id' => 3, 'perishable' => 1, 'min_stock' => 20 ],
+            [ 'name' => 'Whole chicken', 'sku' => 'SKU-CHK-WHOLE', 'barcode' => '1234567890123', 'category_id' => 1, 'perishable' => 1, 'min_stock' => 50 ],
+            [ 'name' => 'Chicken cuts (legs, wings, breast)', 'sku' => 'SKU-CHK-CUTS', 'barcode' => '2234567890123', 'category_id' => 1, 'perishable' => 1, 'min_stock' => 40 ],
+            [ 'name' => 'Processed chicken (marinated)', 'sku' => 'SKU-CHK-PROC', 'barcode' => '3234567890123', 'category_id' => 1, 'perishable' => 1, 'min_stock' => 30 ],
         ];
         $this->db->table('items')->emptyTable();
         $this->db->table('items')->insertBatch($items);

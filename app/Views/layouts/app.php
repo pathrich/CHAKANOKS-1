@@ -143,6 +143,21 @@
             </button>
 
             <div class="d-flex align-items-center ms-auto">
+                <div class="dropdown me-3">
+                    <?php $allRoles = session('user_roles') ?? []; $activeRole = session('user_role'); ?>
+                    <?php if (!empty($allRoles)): ?>
+                        <form method="post" action="<?= site_url('switch-role') ?>">
+                            <?= csrf_field() ?>
+                            <select name="role" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <?php foreach ($allRoles as $role): ?>
+                                    <option value="<?= esc($role) ?>" <?= $role === $activeRole ? 'selected' : '' ?>>
+                                        <?= esc($role) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </form>
+                    <?php endif; ?>
+                </div>
                 <div class="dropdown">
                     <button class="btn btn-link text-white dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
                         <i class="fas fa-user"></i> <?= session('user_full_name') ?? 'User' ?>
@@ -173,6 +188,9 @@
                         <a class="nav-link" href="/inventory">
                             <i class="fas fa-warehouse"></i> Inventory
                         </a>
+                        <a class="nav-link" href="/transfers/my">
+                            <i class="fas fa-exchange-alt"></i> My Transfers
+                        </a>
                     <?php endif; ?>
 
                     <?php if (in_array(session('user_role'), ['supplier', 'franchise'])): ?>
@@ -199,6 +217,12 @@
                         </a>
                         <a class="nav-link" href="/supply-request/admin">
                             <i class="fas fa-tasks"></i> Supply Requests
+                        </a>
+                        <a class="nav-link" href="/transfers">
+                            <i class="fas fa-exchange-alt"></i> Transfers
+                        </a>
+                        <a class="nav-link" href="/items">
+                            <i class="fas fa-box"></i> Items
                         </a>
                         <a class="nav-link" href="/system-admin">
                             <i class="fas fa-cogs"></i> System Admin

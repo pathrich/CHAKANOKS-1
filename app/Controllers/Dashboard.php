@@ -21,6 +21,10 @@ class Dashboard extends BaseController
         if (in_array('central_admin', $userRoles, true)) {
             return $this->adminDashboard();
         }
+        // System admin should go to the dedicated System Admin dashboard
+        if (in_array('system_admin', $userRoles, true)) {
+            return redirect()->to(site_url('system-admin'));
+        }
         if (in_array('branch_manager', $userRoles, true)) {
             return $this->managerDashboard();
         }

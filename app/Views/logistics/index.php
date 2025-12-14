@@ -63,7 +63,7 @@ $title = $title ?? 'Deliveries';
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Order</th>
+                            <th>Order / Type</th>
                             <th>Driver</th>
                             <th>Vehicle</th>
                             <th>Scheduled</th>
@@ -75,13 +75,22 @@ $title = $title ?? 'Deliveries';
                     <?php foreach ($deliveries as $d): ?>
                         <tr>
                             <td><?= $d['id'] ?></td>
-                            <td><?= $d['order_id'] ?? '-' ?></td>
+                            <td>
+                                <?= $d['order_id'] ?? '-' ?><br>
+                                <small class="muted"><?= esc($d['type'] ?? 'PO') ?></small>
+                            </td>
                             <td><?= esc($d['driver_name']) ?></td>
                             <td><?= esc($d['vehicle']) ?></td>
                             <td><?= $d['scheduled_at'] ?></td>
                             <td><?= esc($d['status']) ?></td>
                             <td>
                                 <a href="<?= site_url('deliveries/track/'.$d['id']) ?>" class="btn btn-sm btn-info">Track</a>
+                                <?php if ($d['status'] !== 'delivered'): ?>
+                                    <form method="post" action="<?= site_url('deliveries/mark-delivered') ?>" style="display:inline-block; margin-left:4px;">
+                                        <input type="hidden" name="id" value="<?= (int)$d['id'] ?>">
+                                        <button type="submit" class="btn btn-sm btn-primary">Mark Delivered</button>
+                                    </form>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

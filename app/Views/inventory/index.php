@@ -36,7 +36,14 @@
                 <div class="muted">Items below minimum</div>
                 <ul>
                     <?php foreach ($lowStock as $row): ?>
-                        <li><?= esc($row->name) ?> (<?= esc($row->sku) ?>) — <?= (int)$row->quantity ?>/min <?= (int)$row->min_stock ?></li>
+                        <li>
+                            <?= esc($row->name) ?> (<?= esc($row->sku) ?>) — <?= (int)$row->quantity ?>/min <?= (int)$row->min_stock ?>
+                            <form method="post" action="<?= site_url('inventory/ack-low') ?>" style="display:inline-block; margin-left:8px;">
+                                <input type="hidden" name="branch_id" value="<?= (int)$branchId ?>">
+                                <input type="hidden" name="item_id" value="<?= (int)$row->id ?>">
+                                <button type="submit" style="padding:4px 8px; font-size:11px;">Acknowledge</button>
+                            </form>
+                        </li>
                     <?php endforeach; ?>
                 </ul>
             </div>
@@ -51,13 +58,18 @@
         </div>
 
         <div class="card" style="margin-top:16px">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; gap:12px; flex-wrap:wrap;">
                 <strong>Current Inventory</strong>
                 <form method="get" class="inline">
                     <label class="muted">Branch</label>
                     <input type="number" name="branch_id" value="<?= (int)$branchId ?>" min="1">
                     <button type="submit">Go</button>
                 </form>
+                <div class="inline">
+                    <label class="muted">Scan / Search SKU or Barcode</label>
+                    <input type="text" id="barcodeSearch" placeholder="SKU or barcode">
+                    <button type="button" onclick="scanBarcode()">Search</button>
+                </div>
             </div>
             <table>
                 <thead>
@@ -70,11 +82,13 @@
                         <th>Nearest Expiry</th>
                         <th>Receive</th>
                         <th>Adjust</th>
+                        <th>Actions</th>
+                        <th>Transfer</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($items as $row): $isLow = ((int)$row->quantity < (int)$row->min_stock); ?>
-                        <tr>
+                        <tr data-sku="<?= esc($row->sku) ?>" data-barcode="<?= esc($row->barcode ?? '') ?>">
                             <td><?= esc($row->name) ?></td>
                             <td><?= esc($row->sku) ?></td>
                             <td><?= (int)$row->quantity ?></td>
@@ -98,6 +112,33 @@
                                     <button type="submit">Apply</button>
                                 </form>
                             </td>
+                            <td>
+                                <form class="inline" method="post" action="<?= site_url('inventory/expired') ?>">
+                                    <input type="hidden" name="branch_id" value="<?= (int)$branchId ?>">
+                                    <input type="hidden" name="item_id" value="<?= (int)$row->id ?>">
+                                    <input type="number" name="quantity" placeholder="Expired" min="1">
+                                    <button type="submit">Mark Expired</button>
+                                </form>
+                                <form class="inline" method="post" action="<?= site_url('inventory/damaged') ?>" style="margin-top:4px;">
+                                    <input type="hidden" name="branch_id" value="<?= (int)$branchId ?>">
+                                    <input type="hidden" name="item_id" value="<?= (int)$row->id ?>">
+                                    <input type="number" name="quantity" placeholder="Damaged" min="1">
+                                    <button type="submit">Damaged</button>
+                                </form>
+                                <div class="muted" style="margin-top:4px;">
+                                    <a href="<?= site_url('inventory/history/' . (int)$row->id . '?branch_id=' . (int)$branchId) ?>">View History</a>
+                                </div>
+                            </td>
+                            <td>
+                                <form class="inline" method="post" action="<?= site_url('inventory/transfer-request') ?>">
+                                    <input type="hidden" name="from_branch_id" value="<?= (int)$branchId ?>">
+                                    <input type="hidden" name="item_id" value="<?= (int)$row->id ?>">
+                                    <input type="number" name="to_branch_id" min="1" placeholder="To branch" required>
+                                    <input type="number" name="quantity" min="1" placeholder="Qty" required>
+                                    <input type="text" name="reason" placeholder="Reason (opt)">
+                                    <button type="submit">Request</button>
+                                </form>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -106,6 +147,29 @@
         <?php if (session()->getFlashdata('error')): ?><div class="card" style="margin-top:12px;color:#991b1b;background:#fee2e2;border-color:#fecaca;"><?= esc(session()->getFlashdata('error')) ?></div><?php endif; ?>
         <?php if (session()->getFlashdata('success')): ?><div class="card" style="margin-top:12px;color:#065f46;background:#dcfce7;border-color:#bbf7d0;"><?= esc(session()->getFlashdata('success')) ?></div><?php endif; ?>
     </div>
+    <script>
+        function scanBarcode() {
+            const value = (document.getElementById('barcodeSearch').value || '').trim().toLowerCase();
+            if (!value) return;
+
+            const rows = document.querySelectorAll('tbody tr');
+            let found = false;
+            rows.forEach(row => {
+                row.style.outline = '';
+                const sku = (row.getAttribute('data-sku') || '').toLowerCase();
+                const barcode = (row.getAttribute('data-barcode') || '').toLowerCase();
+                if (!found && (sku.includes(value) || barcode.includes(value))) {
+                    found = true;
+                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    row.style.outline = '2px solid #1976d2';
+                }
+            });
+
+            if (!found) {
+                alert('No matching item found for: ' + value);
+            }
+        }
+    </script>
 </body>
 </html>
 

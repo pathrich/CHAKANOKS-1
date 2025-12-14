@@ -105,7 +105,15 @@
                 </div>
             </div>
             <div class="row g-2 mt-2">
-                <div class="col-md-12">
+                <div class="col-md-4 d-none chicken-cut-wrapper">
+                    <select class="form-select form-select-sm chicken-cut-select">
+                        <option value="">Select cut...</option>
+                        <option value="Legs">Legs</option>
+                        <option value="Wings">Wings</option>
+                        <option value="Breast">Breast</option>
+                    </select>
+                </div>
+                <div class="col-md-<?= 12 ?>">
                     <input type="text" class="form-control form-control-sm item-notes" placeholder="Item notes (optional)">
                 </div>
             </div>
@@ -139,11 +147,25 @@ function addItemRow() {
     
     // Populate item select
     const select = clone.querySelector('.item-select');
+    const cutWrapper = clone.querySelector('.chicken-cut-wrapper');
+    const cutSelect = clone.querySelector('.chicken-cut-select');
+
     itemsData.forEach(item => {
         const option = document.createElement('option');
         option.value = item.id;
         option.textContent = `${item.name} (${item.sku})`;
         select.appendChild(option);
+    });
+
+    // Show cuts dropdown only for "Chicken cuts" item
+    select.addEventListener('change', function() {
+        const selectedItem = itemsData.find(i => i.id == this.value);
+        if (selectedItem && selectedItem.name && selectedItem.name.toLowerCase().includes('chicken cuts')) {
+            cutWrapper.classList.remove('d-none');
+        } else {
+            cutWrapper.classList.add('d-none');
+            if (cutSelect) cutSelect.value = '';
+        }
     });
     
     // Calculate subtotal when qty or price changes
@@ -206,7 +228,14 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
         const itemId = row.querySelector('.item-select').value;
         const quantity = parseInt(row.querySelector('.item-qty').value);
         const unitPrice = parseFloat(row.querySelector('.item-price').value);
-        const notes = row.querySelector('.item-notes').value;
+        const notesInput = row.querySelector('.item-notes');
+        const cutSelect = row.querySelector('.chicken-cut-select');
+        let notes = notesInput ? notesInput.value : '';
+
+        if (cutSelect && cutSelect.value) {
+            const cutNote = `Cut: ${cutSelect.value}`;
+            notes = notes ? `${cutNote}; ${notes}` : cutNote;
+        }
         
         if (itemId && quantity > 0 && unitPrice >= 0) {
             items.push({

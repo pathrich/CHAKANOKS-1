@@ -35,15 +35,17 @@ class Delivery extends BaseController
     {
         $now = Time::now('UTC')->toDateTimeString();
         $payload = [
-            'order_id' => $this->request->getPost('order_id'),
-            'driver_name' => $this->request->getPost('driver_name'),
-            'vehicle' => $this->request->getPost('vehicle'),
-            'route' => $this->request->getPost('route'),
-            'status' => 'scheduled',
+            'order_id'     => $this->request->getPost('order_id'),
+            'transfer_id'  => null,
+            'type'         => 'PO',
+            'driver_name'  => $this->request->getPost('driver_name'),
+            'vehicle'      => $this->request->getPost('vehicle'),
+            'route'        => $this->request->getPost('route'),
+            'status'       => 'scheduled',
             'scheduled_at' => $this->request->getPost('scheduled_at'),
-            'created_by' => session('user_id'),
-            'created_at' => $now,
-            'updated_at' => $now,
+            'created_by'   => session('user_id'),
+            'created_at'   => $now,
+            'updated_at'   => $now,
         ];
 
         $this->deliveryModel->insert($payload);
@@ -58,6 +60,86 @@ class Delivery extends BaseController
         $data['title'] = 'Track Delivery';
         $data['delivery'] = $d;
         return view('logistics/track', $data);
+    }
+
+    // Mark delivery as delivered and, if linked to a transfer, update inventory
+    public function markDelivered()
+    {
+        $deliveryId = (int)$this->request->getPost('id');
+
+        if (! $deliveryId) {
+            return redirect()->back()->with('error', 'Invalid delivery');
+        }
+
+        $db = db_connect();
+        $delivery = $db->table('deliveries')->where('id', $deliveryId)->get()->getRowArray();
+        if (! $delivery) {
+            return redirect()->back()->with('error', 'Delivery not found');
+        }
+
+        $db->transStart();
+
+        // Update delivery status
+        $db->table('deliveries')->where('id', $deliveryId)->update([
+            'status'     => 'delivered',
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        // If this delivery is linked to a stock transfer, update inventory and transfer status
+        if (! empty($delivery['transfer_id'])) {
+            $transfer = $db->table('stock_transfers')->where('id', (int)$delivery['transfer_id'])->get()->getRowArray();
+
+            if ($transfer && $transfer['status'] === 'Approved') {
+                $fromBranch = (int)$transfer['from_branch_id'];
+                $toBranch   = (int)$transfer['to_branch_id'];
+                $itemId     = (int)$transfer['item_id'];
+                $qty        = (int)$transfer['quantity'];
+
+                // OUT from source branch
+                $db->table('branch_stocks')->insert([
+                    'branch_id'   => $fromBranch,
+                    'item_id'     => $itemId,
+                    'quantity'    => -$qty,
+                    'expiry_date' => null,
+                    'created_at'  => date('Y-m-d H:i:s'),
+                    'updated_at'  => date('Y-m-d H:i:s'),
+                ]);
+
+                // IN to destination branch
+                $db->table('branch_stocks')->insert([
+                    'branch_id'   => $toBranch,
+                    'item_id'     => $itemId,
+                    'quantity'    => $qty,
+                    'expiry_date' => null,
+                    'created_at'  => date('Y-m-d H:i:s'),
+                    'updated_at'  => date('Y-m-d H:i:s'),
+                ]);
+
+                // Mark transfer as completed
+                $db->table('stock_transfers')->where('id', $transfer['id'])->update([
+                    'status'     => 'Completed',
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+
+                // Log activity
+                $db->table('activity_logs')->insert([
+                    'user_id'    => session('user_id'),
+                    'action'     => 'transfer_completed',
+                    'details'    => json_encode([
+                        'transfer_id'    => $transfer['id'],
+                        'from_branch_id' => $fromBranch,
+                        'to_branch_id'   => $toBranch,
+                        'item_id'        => $itemId,
+                        'quantity'       => $qty,
+                    ]),
+                    'created_at' => date('Y-m-d H:i:s'),
+                ]);
+            }
+        }
+
+        $db->transComplete();
+
+        return redirect()->back()->with('success', 'Delivery marked as delivered and inventory updated');
     }
 
     // Simple route optimization stub - accepts JSON of stops and returns an ordered list

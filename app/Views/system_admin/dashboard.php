@@ -22,7 +22,7 @@ $title = $title ?? 'System Administrator';
     <nav class="navbar">
         <div><strong><?= esc($title) ?></strong></div>
         <div>
-            <a href="<?= site_url('dashboard') ?>" style="color:white;text-decoration:none;margin-right:1rem">Main</a>
+            <a href="<?= site_url('system-admin') ?>" style="color:white;text-decoration:none;margin-right:1rem">Main</a>
             <a href="<?= site_url('logout') ?>" style="color:white;text-decoration:none">Logout</a>
         </div>
     </nav>

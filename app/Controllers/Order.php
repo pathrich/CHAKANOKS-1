@@ -24,19 +24,26 @@ class Order extends BaseController
 
         $db = db_connect();
 
-        // Get user's branch
-        $user = $db->table('users')
-                   ->select('branch_id')
-                   ->where('id', session('user_id'))
-                   ->get()
-                   ->getRowArray();
+        // Get user's branch (prefer session, fallback to DB)
+        $branchId = (int)(session('branch_id') ?? 0);
+        if (!$branchId) {
+            $user = $db->table('users')
+                       ->select('branch_id')
+                       ->where('id', session('user_id'))
+                       ->get()
+                       ->getRowArray();
+            $branchId = (int)($user['branch_id'] ?? 0);
+        }
 
-        if (!$user || !$user['branch_id']) {
-            return $this->response->setStatusCode(403)->setBody('User has no assigned branch');
+        if (!$branchId) {
+            return view('dashboard/unauthorized', [
+                'userRoles' => ['branch_manager'],
+                'errorMessage' => 'Your account is not linked to any branch. Please ask the System Admin to assign a branch.',
+            ]);
         }
 
         // Get orders for this branch
-        $orders = $this->orderModel->getByBranch($user['branch_id']);
+        $orders = $this->orderModel->getByBranch($branchId);
 
         // Get detailed items for each order
         foreach ($orders as &$order) {
@@ -45,7 +52,7 @@ class Order extends BaseController
 
         $data = [
             'orders'   => $orders,
-            'branchId' => $user['branch_id'],
+            'branchId' => $branchId,
             'title'    => 'Orders Management',
         ];
 
@@ -63,19 +70,26 @@ class Order extends BaseController
 
         $db = db_connect();
 
-        // Get user's branch
-        $user = $db->table('users')
-                   ->select('branch_id')
-                   ->where('id', session('user_id'))
-                   ->get()
-                   ->getRowArray();
+        // Get user's branch (prefer session, fallback to DB)
+        $branchId = (int)(session('branch_id') ?? 0);
+        if (!$branchId) {
+            $user = $db->table('users')
+                       ->select('branch_id')
+                       ->where('id', session('user_id'))
+                       ->get()
+                       ->getRowArray();
+            $branchId = (int)($user['branch_id'] ?? 0);
+        }
 
-        if (!$user || !$user['branch_id']) {
-            return $this->response->setStatusCode(403)->setBody('User has no assigned branch');
+        if (!$branchId) {
+            return view('dashboard/unauthorized', [
+                'userRoles' => ['branch_manager'],
+                'errorMessage' => 'Your account is not linked to any branch. Please ask the System Admin to assign a branch.',
+            ]);
         }
 
         $data = [
-            'branchId' => $user['branch_id'],
+            'branchId' => $branchId,
             'title'    => 'Create New Order',
         ];
 
@@ -170,6 +184,41 @@ class Order extends BaseController
         } catch (\Exception $e) {
             $db->transRollback();
             log_message('error', 'Order creation failed: ' . $e->getMessage());
+            return $this->response->setStatusCode(500)->setJSON(['error' => $e->getMessage()]);
+        }
+    }
+
+
+
+    /**
+     * Submit order (manager -> Pending)
+     */
+    public function submit()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'AJAX request required']);
+        }
+
+        if (!session('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
+        }
+
+        $json = $this->request->getJSON();
+        $orderId = (int)($json->order_id ?? 0);
+
+        if (!$orderId) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid order ID']);
+        }
+
+        try {
+            $this->orderModel->submitOrder($orderId, session('user_id'));
+
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Order submitted for approval',
+            ]);
+        } catch (\Exception $e) {
+            log_message('error', 'Order submit failed: ' . $e->getMessage());
             return $this->response->setStatusCode(500)->setJSON(['error' => $e->getMessage()]);
         }
     }

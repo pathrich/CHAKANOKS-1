@@ -128,7 +128,26 @@ $title = 'Access Denied';
         <p><strong>Required Roles:</strong> central_admin, branch_manager</p>
         
         <div class="nav-links">
-            <a href="<?= site_url('inventory') ?>">Go to Inventory</a>
+            <?php
+                $roles = $userRoles ?? [];
+
+                // Determine best "home" route based on current role
+                if (in_array('inventory_staff', $roles, true) || in_array('branch_manager', $roles, true) || in_array('central_admin', $roles, true)) {
+                    $primaryUrl  = site_url('inventory');
+                    $primaryText = 'Go to Inventory';
+                } elseif (in_array('logistics_coordinator', $roles, true)) {
+                    $primaryUrl  = site_url('deliveries');
+                    $primaryText = 'Go to Deliveries';
+                } elseif (in_array('supplier', $roles, true) || in_array('franchise', $roles, true)) {
+                    $primaryUrl  = site_url('purchase-order');
+                    $primaryText = 'Go to Purchase Orders';
+                } else {
+                    $primaryUrl  = site_url('dashboard');
+                    $primaryText = 'Go to Dashboard';
+                }
+            ?>
+
+            <a href="<?= $primaryUrl ?>"><?= esc($primaryText) ?></a>
             <a href="<?= site_url('logout') ?>" class="logout">Logout</a>
         </div>
     </div>

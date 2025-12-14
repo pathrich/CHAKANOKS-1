@@ -36,11 +36,14 @@ class RoleFilter implements FilterInterface
                 }
             }
 
-            return redirect()->to(site_url('login'))
+            // User is logged in but lacks the required role.
+            // Keep the session and send them to their dashboard with an error message
+            // instead of bouncing them back to the login screen.
+            return redirect()->to(site_url('dashboard'))
                 ->with('error', 'You are not authorized to access this resource');
         } catch (\Exception $e) {
             log_message('error', 'RoleFilter Exception: ' . $e->getMessage());
-            return redirect()->to(site_url('login'))
+            return redirect()->to(site_url('dashboard'))
                 ->with('error', 'An error occurred during authorization');
         }
     }

@@ -13,12 +13,12 @@ class Inventory extends Controller
 
         $db = db_connect();
         $items = $db->query(
-            'SELECT i.id, i.name, i.sku, i.min_stock, i.perishable,
+            'SELECT i.id, i.name, i.sku, i.barcode, i.min_stock, i.perishable,
                     COALESCE(SUM(bs.quantity), 0) AS quantity,
                     MIN(bs.expiry_date) AS nearest_expiry
              FROM items i
              LEFT JOIN branch_stocks bs ON bs.item_id = i.id AND bs.branch_id = ?
-             GROUP BY i.id, i.name, i.sku, i.min_stock, i.perishable',
+             GROUP BY i.id, i.name, i.sku, i.barcode, i.min_stock, i.perishable',
             [ $branchId ]
         )->getResult();
 
@@ -101,6 +101,166 @@ class Inventory extends Controller
         $db->transComplete();
 
         return redirect()->back()->with('success', 'Stock adjusted');
+    }
+
+    public function markExpired(): RedirectResponse
+    {
+        $branchId = (int)$this->request->getPost('branch_id');
+        $itemId   = (int)$this->request->getPost('item_id');
+        $qty      = (int)$this->request->getPost('quantity');
+
+        if ($qty <= 0) {
+            return redirect()->back()->with('error', 'Quantity must be positive');
+        }
+
+        $db = db_connect();
+        $db->transStart();
+
+        // Record as a negative movement (expired)
+        $db->table('branch_stocks')->insert([
+            'branch_id'   => $branchId,
+            'item_id'     => $itemId,
+            'quantity'    => -$qty,
+            'expiry_date' => null,
+            'created_at'  => date('Y-m-d H:i:s'),
+            'updated_at'  => date('Y-m-d H:i:s'),
+        ]);
+
+        $db->table('activity_logs')->insert([
+            'user_id'    => session('user_id'),
+            'action'     => 'inventory_expired',
+            'details'    => json_encode(['branch_id' => $branchId, 'item_id' => $itemId, 'quantity' => $qty]),
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        $db->transComplete();
+
+        return redirect()->back()->with('success', 'Expired stock recorded');
+    }
+
+    public function markDamaged(): RedirectResponse
+    {
+        $branchId = (int)$this->request->getPost('branch_id');
+        $itemId   = (int)$this->request->getPost('item_id');
+        $qty      = (int)$this->request->getPost('quantity');
+
+        if ($qty <= 0) {
+            return redirect()->back()->with('error', 'Quantity must be positive');
+        }
+
+        $db = db_connect();
+        $db->transStart();
+
+        // Record as a negative movement (damaged)
+        $db->table('branch_stocks')->insert([
+            'branch_id'   => $branchId,
+            'item_id'     => $itemId,
+            'quantity'    => -$qty,
+            'expiry_date' => null,
+            'created_at'  => date('Y-m-d H:i:s'),
+            'updated_at'  => date('Y-m-d H:i:s'),
+        ]);
+
+        $db->table('activity_logs')->insert([
+            'user_id'    => session('user_id'),
+            'action'     => 'inventory_damaged',
+            'details'    => json_encode(['branch_id' => $branchId, 'item_id' => $itemId, 'quantity' => $qty]),
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        $db->transComplete();
+
+        return redirect()->back()->with('success', 'Damaged stock recorded');
+    }
+
+    public function history(int $itemId)
+    {
+        $branchId = (int)($this->request->getGet('branch_id') ?? 1);
+
+        $db = db_connect();
+
+        $item = $db->table('items')->where('id', $itemId)->get()->getRow();
+
+        $movements = $db->table('branch_stocks')
+            ->select('quantity, expiry_date, created_at')
+            ->where('branch_id', $branchId)
+            ->where('item_id', $itemId)
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->getResult();
+
+        return view('inventory/history', [
+            'item'      => $item,
+            'movements' => $movements,
+            'branchId'  => $branchId,
+        ]);
+    }
+
+    public function acknowledgeLowStock(): RedirectResponse
+    {
+        $branchId = (int)$this->request->getPost('branch_id');
+        $itemId   = (int)$this->request->getPost('item_id');
+
+        if (! $branchId || ! $itemId) {
+            return redirect()->back()->with('error', 'Invalid low stock acknowledgement');
+        }
+
+        $db = db_connect();
+        $db->table('activity_logs')->insert([
+            'user_id'    => session('user_id'),
+            'action'     => 'low_stock_acknowledged',
+            'details'    => json_encode(['branch_id' => $branchId, 'item_id' => $itemId]),
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        return redirect()->back()->with('success', 'Low stock alert acknowledged');
+    }
+
+    public function requestTransfer(): RedirectResponse
+    {
+        $fromBranchId = (int)$this->request->getPost('from_branch_id');
+        $toBranchId   = (int)$this->request->getPost('to_branch_id');
+        $itemId       = (int)$this->request->getPost('item_id');
+        $qty          = (int)$this->request->getPost('quantity');
+        $reason       = trim((string)$this->request->getPost('reason'));
+
+        if ($qty <= 0) {
+            return redirect()->back()->with('error', 'Transfer quantity must be positive');
+        }
+        if ($fromBranchId === $toBranchId || $toBranchId <= 0) {
+            return redirect()->back()->with('error', 'Please choose a different target branch');
+        }
+
+        $db = db_connect();
+        $db->transStart();
+
+        $db->table('stock_transfers')->insert([
+            'from_branch_id' => $fromBranchId,
+            'to_branch_id'   => $toBranchId,
+            'item_id'        => $itemId,
+            'quantity'       => $qty,
+            'status'         => 'Requested',
+            'requested_by'   => session('user_id'),
+            'reason'         => $reason ?: null,
+            'created_at'     => date('Y-m-d H:i:s'),
+            'updated_at'     => date('Y-m-d H:i:s'),
+        ]);
+
+        $db->table('activity_logs')->insert([
+            'user_id'    => session('user_id'),
+            'action'     => 'transfer_request_created',
+            'details'    => json_encode([
+                'from_branch_id' => $fromBranchId,
+                'to_branch_id'   => $toBranchId,
+                'item_id'        => $itemId,
+                'quantity'       => $qty,
+            ]),
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        $db->transComplete();
+
+        return redirect()->back()->with('success', 'Transfer request submitted');
     }
 }
 
