@@ -23,20 +23,17 @@ class SupplyRequest extends BaseController
     {
         // Ensure user is authenticated
         if (!session('user_id')) {
-            return redirect()->to('/login');
+            return redirect()->to(site_url('login'));
         }
 
         // Check if admin
         $db = db_connect();
-        $userRoles = $db->table('user_roles')
-                        ->select('role_id')
-                        ->join('roles', 'roles.id = user_roles.role_id')
-                        ->where('user_id', session('user_id'))
-                        ->get()
-                        ->getResultArray();
-
-        $roleIds = array_column($userRoles, 'role_id');
-        $isAdmin = in_array(1, $roleIds) || in_array(2, $roleIds);
+        $userRoles = $db->table('roles')->select('roles.name')
+                        ->join('user_roles', 'user_roles.role_id = roles.id')
+                        ->where('user_roles.user_id', session('user_id'))
+                        ->get()->getResultArray();
+        $roleNames = array_map(fn($r) => $r['name'], $userRoles);
+        $isAdmin = in_array('central_admin', $roleNames, true) || in_array('system_admin', $roleNames, true);
 
         if (!$isAdmin) {
             return $this->response->setStatusCode(403)->setBody('Access denied');
@@ -56,6 +53,68 @@ class SupplyRequest extends BaseController
         ];
 
         return view('supply_request/admin_dashboard', $data);
+    }
+
+    /**
+     * Admin: fetch all supply requests (any status) for the "All Requests" tab
+     * GET: /supply-request/all
+     */
+    public function allRequests()
+    {
+        if (!session('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['success' => false, 'error' => 'Not authenticated']);
+        }
+
+        $db = db_connect();
+        $userRoles = $db->table('roles')->select('roles.name')
+            ->join('user_roles', 'user_roles.role_id = roles.id')
+            ->where('user_roles.user_id', session('user_id'))
+            ->get()->getResultArray();
+        $roleNames = array_map(fn($r) => $r['name'], $userRoles);
+        $isAdmin = in_array('central_admin', $roleNames, true) || in_array('system_admin', $roleNames, true);
+
+        if (!$isAdmin) {
+            return $this->response->setStatusCode(403)->setJSON(['success' => false, 'error' => 'Access denied']);
+        }
+
+        try {
+            $requests = $this->supplyRequestModel
+                ->select('supply_requests.*, users.full_name as requester_name, branches.name as branch_name')
+                ->join('users', 'users.id = supply_requests.requested_by')
+                ->join('branches', 'branches.id = supply_requests.branch_id')
+                ->orderBy('supply_requests.created_at', 'DESC')
+                ->findAll();
+
+            foreach ($requests as &$r) {
+                $withItems = $this->supplyRequestModel->getWithItems($r['id']);
+                if ($withItems) {
+                    $r['items'] = $withItems['items'] ?? [];
+                } else {
+                    $r['items'] = [];
+                }
+            }
+
+            return $this->response->setJSON([
+                'success' => true,
+                'requests' => $requests,
+            ]);
+        } catch (\Exception $e) {
+            log_message('error', 'Failed to load all supply requests: ' . $e->getMessage());
+            return $this->response->setStatusCode(500)->setJSON(['success' => false, 'error' => 'Failed to load requests']);
+        }
+    }
+
+    public function create()
+    {
+        if (!session('user_id')) {
+            return redirect()->to(site_url('login'));
+        }
+
+        $data = [
+            'title' => 'Submit Supply Request',
+        ];
+
+        return view('supply_request/staff_submit', $data);
     }
 
     /**

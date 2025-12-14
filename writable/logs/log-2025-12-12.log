@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ERROR - 2025-12-12 18:27:53 --> mysqli_sql_exception: Table 'chakanoks_db.users' doesn't exist in engine in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
 Stack trace:
 #0 C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT *\nFROM `...', 0)
@@ -146,6 +147,9 @@ Stack trace:
 #11 C:\xampp\htdocs\CHAKANOKS-1\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
 #12 {main}
 ERROR - 2025-12-12 18:42:00 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`users`, CONSTRAINT `users_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE SET NULL) in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+=======
+ERROR - 2025-12-12 19:23:07 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`users`, CONSTRAINT `users_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE SET NULL) in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+>>>>>>> 7b34fa832e84a49ca2de74d7a657b36ec355deaf
 Stack trace:
 #0 C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `us...', 0)
 #1 C:\xampp\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `us...')
@@ -161,6 +165,7 @@ Stack trace:
 #11 C:\xampp\htdocs\CHAKANOKS-1\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
 #12 C:\xampp\htdocs\CHAKANOKS-1\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
 #13 {main}
+<<<<<<< HEAD
 ERROR - 2025-12-12 18:51:43 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`users`, CONSTRAINT `users_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE SET NULL) in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
 Stack trace:
 #0 C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `us...', 0)
@@ -180,6 +185,9 @@ Stack trace:
 #14 C:\xampp\htdocs\CHAKANOKS-1\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
 #15 {main}
 ERROR - 2025-12-12 18:54:57 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`users`, CONSTRAINT `users_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE SET NULL) in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+=======
+ERROR - 2025-12-12 19:29:42 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`users`, CONSTRAINT `users_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE SET NULL) in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+>>>>>>> 7b34fa832e84a49ca2de74d7a657b36ec355deaf
 Stack trace:
 #0 C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `us...', 0)
 #1 C:\xampp\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `us...')
@@ -195,7 +203,11 @@ Stack trace:
 #11 C:\xampp\htdocs\CHAKANOKS-1\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
 #12 C:\xampp\htdocs\CHAKANOKS-1\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
 #13 {main}
+<<<<<<< HEAD
 ERROR - 2025-12-12 18:56:51 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`users`, CONSTRAINT `users_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE SET NULL) in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+=======
+ERROR - 2025-12-12 19:29:46 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`users`, CONSTRAINT `users_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE SET NULL) in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+>>>>>>> 7b34fa832e84a49ca2de74d7a657b36ec355deaf
 Stack trace:
 #0 C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `us...', 0)
 #1 C:\xampp\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `us...')
@@ -211,6 +223,7 @@ Stack trace:
 #11 C:\xampp\htdocs\CHAKANOKS-1\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
 #12 C:\xampp\htdocs\CHAKANOKS-1\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
 #13 {main}
+<<<<<<< HEAD
 ERROR - 2025-12-12 19:25:49 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`users`, CONSTRAINT `users_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE SET NULL) in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
 Stack trace:
 #0 C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `us...', 0)
@@ -342,6 +355,9 @@ Stack trace:
 #14 C:\xampp\htdocs\CHAKANOKS-1\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
 #15 {main}
 ERROR - 2025-12-12 19:40:53 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`branch_stocks`, CONSTRAINT `branch_stocks_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+=======
+ERROR - 2025-12-12 20:07:46 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`branch_stocks`, CONSTRAINT `branch_stocks_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+>>>>>>> 7b34fa832e84a49ca2de74d7a657b36ec355deaf
 Stack trace:
 #0 C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `br...', 0)
 #1 C:\xampp\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `br...')
@@ -357,3 +373,34 @@ Stack trace:
 #11 C:\xampp\htdocs\CHAKANOKS-1\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
 #12 C:\xampp\htdocs\CHAKANOKS-1\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
 #13 {main}
+<<<<<<< HEAD
+=======
+ERROR - 2025-12-12 20:36:19 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`branch_stocks`, CONSTRAINT `branch_stocks_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `br...', 0)
+#1 C:\xampp\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `br...')
+#2 C:\xampp\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `br...')
+#3 C:\xampp\htdocs\CHAKANOKS-1\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `br...', Array, false)
+#4 C:\xampp\htdocs\CHAKANOKS-1\app\Controllers\Inventory.php(87): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\CHAKANOKS-1\system\CodeIgniter.php(933): App\Controllers\Inventory->adjust()
+#6 C:\xampp\htdocs\CHAKANOKS-1\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Inventory))
+#7 C:\xampp\htdocs\CHAKANOKS-1\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\CHAKANOKS-1\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\CHAKANOKS-1\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\CHAKANOKS-1\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-12-12 20:51:31 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`chakanoks_db`.`branch_stocks`, CONSTRAINT `branch_stocks_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) in C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\CHAKANOKS-1\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `br...', 0)
+#1 C:\xampp\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `br...')
+#2 C:\xampp\htdocs\CHAKANOKS-1\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `br...')
+#3 C:\xampp\htdocs\CHAKANOKS-1\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `br...', Array, false)
+#4 C:\xampp\htdocs\CHAKANOKS-1\app\Controllers\Inventory.php(55): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\CHAKANOKS-1\system\CodeIgniter.php(933): App\Controllers\Inventory->receive()
+#6 C:\xampp\htdocs\CHAKANOKS-1\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Inventory))
+#7 C:\xampp\htdocs\CHAKANOKS-1\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\CHAKANOKS-1\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\CHAKANOKS-1\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\CHAKANOKS-1\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+>>>>>>> 7b34fa832e84a49ca2de74d7a657b36ec355deaf

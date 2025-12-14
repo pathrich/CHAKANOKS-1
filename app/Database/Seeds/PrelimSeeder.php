@@ -9,14 +9,21 @@ class PrelimSeeder extends Seeder
 {
     public function run()
     {
-        // Call granular seeders using class references
-        $this->call(BranchSeeder::class);
-        $this->call(RoleSeeder::class);
-        $this->call(UserSeeder::class);
-        $this->call(UserRoleSeeder::class);
-        $this->call(CategorySeeder::class);
-        $this->call(ItemSeeder::class);
-        $this->call(StockSeeder::class);
+        $this->db->disableForeignKeyChecks();
+        try {
+            // Call granular seeders using class references
+            $this->call(BranchSeeder::class);
+            $this->call(RoleSeeder::class);
+            $this->call(UserSeeder::class);
+            $this->call(UserRoleSeeder::class);
+            $this->call(SupplierSeeder::class);
+            $this->call(UserSupplierSeeder::class);
+            $this->call(CategorySeeder::class);
+            $this->call(ItemSeeder::class);
+            $this->call(StockSeeder::class);
+        } finally {
+            $this->db->enableForeignKeyChecks();
+        }
     }
 }
 
