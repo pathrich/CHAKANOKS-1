@@ -51,22 +51,35 @@ class Inventory extends Controller
         }
 
         $db = db_connect();
-        $db->transStart();
-        $db->table('branch_stocks')->insert([
-            'branch_id' => $branchId,
-            'item_id' => $itemId,
-            'quantity' => $qty,
-            'expiry_date' => $expiry,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
-        $db->table('activity_logs')->insert([
-            'user_id' => session('user_id'),
-            'action' => 'inventory_receive',
-            'details' => json_encode([ 'branch_id' => $branchId, 'item_id' => $itemId, 'quantity' => $qty, 'expiry_date' => $expiry ]),
-            'created_at' => date('Y-m-d H:i:s'),
-        ]);
-        $db->transComplete();
+        $branch = $db->table('branches')->select('id')->where('id', $branchId)->get()->getRowArray();
+        if (! $branch) {
+            return redirect()->back()->with('error', 'Invalid branch selected for receiving stock');
+        }
+
+        try {
+            $db->transStart();
+            $db->table('branch_stocks')->insert([
+                'branch_id' => $branchId,
+                'item_id' => $itemId,
+                'quantity' => $qty,
+                'expiry_date' => $expiry,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+            $db->table('activity_logs')->insert([
+                'user_id' => session('user_id'),
+                'action' => 'inventory_receive',
+                'details' => json_encode([ 'branch_id' => $branchId, 'item_id' => $itemId, 'quantity' => $qty, 'expiry_date' => $expiry ]),
+                'created_at' => date('Y-m-d H:i:s'),
+            ]);
+            $db->transComplete();
+        } catch (\Throwable $e) {
+            if ($db->transStatus() !== false) {
+                $db->transComplete();
+            }
+            log_message('error', 'Inventory receive failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to receive stock: ' . $e->getMessage());
+        }
 
         return redirect()->back()->with('success', 'Stock received');
     }
@@ -82,23 +95,36 @@ class Inventory extends Controller
         }
 
         $db = db_connect();
-        $db->transStart();
-        // store as a new stock movement row (no expiry)
-        $db->table('branch_stocks')->insert([
-            'branch_id' => $branchId,
-            'item_id' => $itemId,
-            'quantity' => $delta,
-            'expiry_date' => null,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
-        $db->table('activity_logs')->insert([
-            'user_id' => session('user_id'),
-            'action' => 'inventory_adjust',
-            'details' => json_encode([ 'branch_id' => $branchId, 'item_id' => $itemId, 'delta' => $delta ]),
-            'created_at' => date('Y-m-d H:i:s'),
-        ]);
-        $db->transComplete();
+        $branch = $db->table('branches')->select('id')->where('id', $branchId)->get()->getRowArray();
+        if (! $branch) {
+            return redirect()->back()->with('error', 'Invalid branch selected for stock adjustment');
+        }
+
+        try {
+            $db->transStart();
+            // store as a new stock movement row (no expiry)
+            $db->table('branch_stocks')->insert([
+                'branch_id' => $branchId,
+                'item_id' => $itemId,
+                'quantity' => $delta,
+                'expiry_date' => null,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+            $db->table('activity_logs')->insert([
+                'user_id' => session('user_id'),
+                'action' => 'inventory_adjust',
+                'details' => json_encode([ 'branch_id' => $branchId, 'item_id' => $itemId, 'delta' => $delta ]),
+                'created_at' => date('Y-m-d H:i:s'),
+            ]);
+            $db->transComplete();
+        } catch (\Throwable $e) {
+            if ($db->transStatus() !== false) {
+                $db->transComplete();
+            }
+            log_message('error', 'Inventory adjust failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to adjust stock: ' . $e->getMessage());
+        }
 
         return redirect()->back()->with('success', 'Stock adjusted');
     }
@@ -114,26 +140,39 @@ class Inventory extends Controller
         }
 
         $db = db_connect();
-        $db->transStart();
+        $branch = $db->table('branches')->select('id')->where('id', $branchId)->get()->getRowArray();
+        if (! $branch) {
+            return redirect()->back()->with('error', 'Invalid branch selected for expired stock');
+        }
 
-        // Record as a negative movement (expired)
-        $db->table('branch_stocks')->insert([
-            'branch_id'   => $branchId,
-            'item_id'     => $itemId,
-            'quantity'    => -$qty,
-            'expiry_date' => null,
-            'created_at'  => date('Y-m-d H:i:s'),
-            'updated_at'  => date('Y-m-d H:i:s'),
-        ]);
+        try {
+            $db->transStart();
 
-        $db->table('activity_logs')->insert([
-            'user_id'    => session('user_id'),
-            'action'     => 'inventory_expired',
-            'details'    => json_encode(['branch_id' => $branchId, 'item_id' => $itemId, 'quantity' => $qty]),
-            'created_at' => date('Y-m-d H:i:s'),
-        ]);
+            // Record as a negative movement (expired)
+            $db->table('branch_stocks')->insert([
+                'branch_id'   => $branchId,
+                'item_id'     => $itemId,
+                'quantity'    => -$qty,
+                'expiry_date' => null,
+                'created_at'  => date('Y-m-d H:i:s'),
+                'updated_at'  => date('Y-m-d H:i:s'),
+            ]);
 
-        $db->transComplete();
+            $db->table('activity_logs')->insert([
+                'user_id'    => session('user_id'),
+                'action'     => 'inventory_expired',
+                'details'    => json_encode(['branch_id' => $branchId, 'item_id' => $itemId, 'quantity' => $qty]),
+                'created_at' => date('Y-m-d H:i:s'),
+            ]);
+
+            $db->transComplete();
+        } catch (\Throwable $e) {
+            if ($db->transStatus() !== false) {
+                $db->transComplete();
+            }
+            log_message('error', 'Inventory markExpired failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to record expired stock: ' . $e->getMessage());
+        }
 
         return redirect()->back()->with('success', 'Expired stock recorded');
     }
@@ -149,26 +188,39 @@ class Inventory extends Controller
         }
 
         $db = db_connect();
-        $db->transStart();
+        $branch = $db->table('branches')->select('id')->where('id', $branchId)->get()->getRowArray();
+        if (! $branch) {
+            return redirect()->back()->with('error', 'Invalid branch selected for damaged stock');
+        }
 
-        // Record as a negative movement (damaged)
-        $db->table('branch_stocks')->insert([
-            'branch_id'   => $branchId,
-            'item_id'     => $itemId,
-            'quantity'    => -$qty,
-            'expiry_date' => null,
-            'created_at'  => date('Y-m-d H:i:s'),
-            'updated_at'  => date('Y-m-d H:i:s'),
-        ]);
+        try {
+            $db->transStart();
 
-        $db->table('activity_logs')->insert([
-            'user_id'    => session('user_id'),
-            'action'     => 'inventory_damaged',
-            'details'    => json_encode(['branch_id' => $branchId, 'item_id' => $itemId, 'quantity' => $qty]),
-            'created_at' => date('Y-m-d H:i:s'),
-        ]);
+            // Record as a negative movement (damaged)
+            $db->table('branch_stocks')->insert([
+                'branch_id'   => $branchId,
+                'item_id'     => $itemId,
+                'quantity'    => -$qty,
+                'expiry_date' => null,
+                'created_at'  => date('Y-m-d H:i:s'),
+                'updated_at'  => date('Y-m-d H:i:s'),
+            ]);
 
-        $db->transComplete();
+            $db->table('activity_logs')->insert([
+                'user_id'    => session('user_id'),
+                'action'     => 'inventory_damaged',
+                'details'    => json_encode(['branch_id' => $branchId, 'item_id' => $itemId, 'quantity' => $qty]),
+                'created_at' => date('Y-m-d H:i:s'),
+            ]);
+
+            $db->transComplete();
+        } catch (\Throwable $e) {
+            if ($db->transStatus() !== false) {
+                $db->transComplete();
+            }
+            log_message('error', 'Inventory markDamaged failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to record damaged stock: ' . $e->getMessage());
+        }
 
         return redirect()->back()->with('success', 'Damaged stock recorded');
     }

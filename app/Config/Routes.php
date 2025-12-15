@@ -14,6 +14,20 @@ $routes->post('switch-role', 'Auth::switchRole', ['filter' => 'auth']);
 
 $routes->get('dashboard', 'Dashboard::index', ['filter' => 'auth']);
 
+// Reports hub
+$routes->get('reports', 'Reports::index', ['filter' => 'auth']);
+
+// User profile
+$routes->get('profile', 'Profile::index', ['filter' => 'auth']);
+$routes->post('profile/update', 'Profile::update', ['filter' => 'auth']);
+$routes->post('profile/change-password', 'Profile::changePassword', ['filter' => 'auth']);
+
+// Activity logs for current user
+$routes->get('activity-logs', 'ActivityLogs::index', ['filter' => 'auth']);
+
+// Settings & Users hub
+$routes->get('settings', 'SystemAdmin::index', ['filter' => 'role:central_admin,system_admin']);
+
 $routes->get('inventory', 'Inventory::index', ['filter' => 'role:inventory_staff,branch_manager,central_admin,system_admin']);
 $routes->post('inventory/receive', 'Inventory::receive', ['filter' => 'role:inventory_staff,branch_manager,central_admin,system_admin']);
 $routes->post('inventory/adjust', 'Inventory::adjust', ['filter' => 'role:inventory_staff,branch_manager,central_admin,system_admin']);
@@ -32,6 +46,9 @@ $routes->get('supply-request/create', 'SupplyRequest::create', ['filter' => 'rol
 $routes->post('supply-request/submit', 'SupplyRequest::submit', ['filter' => 'auth']);
 $routes->post('supply-request/approve', 'SupplyRequest::approve', ['filter' => 'auth']);
 $routes->post('supply-request/reject', 'SupplyRequest::reject', ['filter' => 'auth']);
+$routes->get('supply-request/pending-branch', 'SupplyRequest::pendingBranch', ['filter' => 'role:branch_manager']);
+$routes->post('supply-request/branch-approve', 'SupplyRequest::branchApprove', ['filter' => 'role:branch_manager']);
+$routes->post('supply-request/branch-reject', 'SupplyRequest::branchReject', ['filter' => 'role:branch_manager']);
 $routes->get('supply-request/all', 'SupplyRequest::allRequests', ['filter' => 'role:central_admin,system_admin']);
 $routes->get('supply-request/pending-count', 'SupplyRequest::getPendingCount', ['filter' => 'auth']);
 $routes->get('supply-request/my-requests', 'SupplyRequest::myRequests', ['filter' => 'auth']);
@@ -45,7 +62,9 @@ $routes->get('transfers/my', 'Transfers::my', ['filter' => 'auth']);
 // Order Routes
 $routes->get('order', 'Order::index', ['filter' => 'auth']);
 $routes->get('order/create', 'Order::create', ['filter' => 'auth']);
+$routes->get('order/edit/(:num)', 'Order::edit/$1', ['filter' => 'auth']);
 $routes->post('order/store', 'Order::store', ['filter' => 'auth']);
+$routes->post('order/update', 'Order::update', ['filter' => 'auth']);
 $routes->post('order/submit', 'Order::submit', ['filter' => 'auth']);
 $routes->post('order/approve', 'Order::approve', ['filter' => 'role:central_admin,system_admin']);
 $routes->post('order/cancel', 'Order::cancel', ['filter' => 'auth']);
@@ -70,17 +89,28 @@ $routes->post('purchase-order/mark-delivered', 'PurchaseOrder::markDelivered', [
 $routes->get('deliveries', 'Delivery::index', ['filter' => 'role:logistics_coordinator']);
 $routes->get('deliveries/create', 'Delivery::create', ['filter' => 'role:logistics_coordinator']);
 $routes->post('deliveries/store', 'Delivery::store', ['filter' => 'role:logistics_coordinator']);
+$routes->get('deliveries/edit/(:num)', 'Delivery::edit/$1', ['filter' => 'role:logistics_coordinator']);
+$routes->post('deliveries/update/(:num)', 'Delivery::update/$1', ['filter' => 'role:logistics_coordinator']);
 $routes->get('deliveries/track/(:num)', 'Delivery::track/$1', ['filter' => 'role:logistics_coordinator']);
 $routes->post('deliveries/optimize', 'Delivery::optimizeRoute', ['filter' => 'role:logistics_coordinator']);
 // Mark delivery as delivered and update inventory for transfers
 $routes->post('deliveries/mark-delivered', 'Delivery::markDelivered', ['filter' => 'role:logistics_coordinator']);
 
 // System Administrator routes
-$routes->get('system-admin', 'SystemAdmin::index', ['filter' => 'role:system_admin']);
-$routes->get('system-admin/users', 'SystemAdmin::users', ['filter' => 'role:system_admin']);
-$routes->get('system-admin/backups', 'SystemAdmin::backups', ['filter' => 'role:system_admin']);
-$routes->get('system-admin/security', 'SystemAdmin::security', ['filter' => 'role:system_admin']);
+$routes->get('system-admin', 'SystemAdmin::index', ['filter' => 'role:central_admin,system_admin']);
+$routes->get('system-admin/users', 'SystemAdmin::users', ['filter' => 'role:central_admin,system_admin']);
+$routes->get('system-admin/backups', 'SystemAdmin::backups', ['filter' => 'role:central_admin,system_admin']);
+$routes->get('system-admin/security', 'SystemAdmin::security', ['filter' => 'role:central_admin,system_admin']);
+
+// System Admin Branch Management
+$routes->get('system-admin/branches', 'SystemAdmin::branches', ['filter' => 'role:central_admin,system_admin']);
+$routes->get('system-admin/branches/create', 'SystemAdmin::branchCreate', ['filter' => 'role:central_admin,system_admin']);
+$routes->post('system-admin/branches/store', 'SystemAdmin::branchStore', ['filter' => 'role:central_admin,system_admin']);
 
 // Item management routes (admin)
 $routes->get('items', 'Items::index', ['filter' => 'role:central_admin,system_admin']);
 $routes->post('items/store', 'Items::store', ['filter' => 'role:central_admin,system_admin']);
+
+// Branch management routes (admin)
+$routes->get('branches', 'Branches::index', ['filter' => 'role:central_admin,system_admin']);
+$routes->post('branches/store', 'Branches::store', ['filter' => 'role:central_admin,system_admin']);

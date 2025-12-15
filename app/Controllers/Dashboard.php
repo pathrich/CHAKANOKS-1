@@ -13,7 +13,9 @@ class Dashboard extends BaseController
             ->where('user_roles.user_id', session('user_id'))
             ->get()->getResultArray();
 
-        $userRoles = array_map(fn($r) => $r['name'], $roles);
+        $userRoles = array_map(function ($r) {
+            return $r['name'];
+        }, $roles);
         
         log_message('debug', 'Dashboard Access - User ID: ' . session('user_id') . ', Roles: ' . json_encode($userRoles));
 

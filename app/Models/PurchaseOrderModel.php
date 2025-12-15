@@ -9,12 +9,12 @@ class PurchaseOrderModel extends Model
 {
     protected $table = 'purchase_orders';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['supply_request_id','supplier_id','created_by','status','po_number','total_items','total_amount','tracking_number','notes','created_at','updated_at'];
+    protected $allowedFields = ['order_id','branch_id','supply_request_id','supplier_id','created_by','status','po_number','total_items','total_amount','tracking_number','notes','created_at','updated_at'];
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
-    public function createFromSupplyRequest(int $supplyRequestId, int $supplierId, array $items, int $createdBy, ?string $notes = null)
+    public function createFromSupplyRequest(int $supplyRequestId, ?int $supplierId, array $items, int $createdBy, ?string $notes = null)
     {
         $db = db_connect();
         $db->transStart();
@@ -68,6 +68,12 @@ class PurchaseOrderModel extends Model
         }
 
         return $this->find($id);
+    }
+
+    public function findBySupplyRequestId(int $supplyRequestId): ?array
+    {
+        $row = $this->where('supply_request_id', $supplyRequestId)->orderBy('id', 'DESC')->first();
+        return $row ?: null;
     }
 
     protected function generatePONumber()

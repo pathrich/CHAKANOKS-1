@@ -26,33 +26,42 @@ class SupplyRequest extends BaseController
             return redirect()->to(site_url('login'));
         }
 
-        // Check if admin
-        $db = db_connect();
-        $userRoles = $db->table('roles')->select('roles.name')
-                        ->join('user_roles', 'user_roles.role_id = roles.id')
-                        ->where('user_roles.user_id', session('user_id'))
-                        ->get()->getResultArray();
-        $roleNames = array_map(fn($r) => $r['name'], $userRoles);
-        $isAdmin = in_array('central_admin', $roleNames, true) || in_array('system_admin', $roleNames, true);
+        try {
+            // Check if admin
+            $db = db_connect();
+            $userRoles = $db->table('roles')->select('roles.name')
+                            ->join('user_roles', 'user_roles.role_id = roles.id')
+                            ->where('user_roles.user_id', session('user_id'))
+                            ->get()->getResultArray();
+            $roleNames = array_map(function ($r) {
+                return $r['name'];
+            }, $userRoles);
+            $isAdmin = in_array('central_admin', $roleNames, true) || in_array('system_admin', $roleNames, true);
 
-        if (!$isAdmin) {
-            return $this->response->setStatusCode(403)->setBody('Access denied');
+            if (!$isAdmin) {
+                return $this->response->setStatusCode(403)->setBody('Access denied');
+            }
+
+            // Get pending requests
+            $pendingRequests = $this->supplyRequestModel->getPending();
+
+            // Get request details with items for each
+            foreach ($pendingRequests as &$request) {
+                $request = $this->supplyRequestModel->getWithItems($request['id']);
+            }
+
+            $data = [
+                'pendingRequests' => $pendingRequests,
+                'title' => 'Supply Requests',
+            ];
+
+            return view('supply_request/admin_dashboard', $data);
+        } catch (\Throwable $e) {
+            log_message('error', 'SupplyRequest index failed: ' . $e->getMessage());
+            return $this->response
+                ->setStatusCode(500)
+                ->setBody('Failed to load supply requests: ' . $e->getMessage());
         }
-
-        // Get pending requests
-        $pendingRequests = $this->supplyRequestModel->getPending();
-
-        // Get request details with items for each
-        foreach ($pendingRequests as &$request) {
-            $request = $this->supplyRequestModel->getWithItems($request['id']);
-        }
-
-        $data = [
-            'pendingRequests' => $pendingRequests,
-            'title' => 'Supply Requests',
-        ];
-
-        return view('supply_request/admin_dashboard', $data);
     }
 
     /**
@@ -70,7 +79,9 @@ class SupplyRequest extends BaseController
             ->join('user_roles', 'user_roles.role_id = roles.id')
             ->where('user_roles.user_id', session('user_id'))
             ->get()->getResultArray();
-        $roleNames = array_map(fn($r) => $r['name'], $userRoles);
+        $roleNames = array_map(function ($r) {
+            return $r['name'];
+        }, $userRoles);
         $isAdmin = in_array('central_admin', $roleNames, true) || in_array('system_admin', $roleNames, true);
 
         if (!$isAdmin) {
@@ -110,8 +121,15 @@ class SupplyRequest extends BaseController
             return redirect()->to(site_url('login'));
         }
 
+        $db = db_connect();
+        $suppliers = [];
+        if ($db->tableExists('suppliers')) {
+            $suppliers = $db->table('suppliers')->select('id, name')->orderBy('name', 'ASC')->get()->getResultArray();
+        }
+
         $data = [
             'title' => 'Submit Supply Request',
+            'suppliers' => $suppliers,
         ];
 
         return view('supply_request/staff_submit', $data);
@@ -125,52 +143,121 @@ class SupplyRequest extends BaseController
      */
     public function submit()
     {
-        if (!$this->request->isAJAX()) {
-            return $this->response->setStatusCode(400)->setJSON(['error' => 'AJAX request required']);
-        }
-
-        if (!session('user_id')) {
-            return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
-        }
-
-        $db = db_connect();
-
-        // Get user's branch
-        $user = $db->table('users')
-                   ->select('branch_id')
-                   ->where('id', session('user_id'))
-                   ->get()
-                   ->getRowArray();
-
-        if (!$user || !$user['branch_id']) {
-            return $this->response->setStatusCode(400)->setJSON(['error' => 'User has no assigned branch']);
-        }
-
-        // Validate input
-        $items = $this->request->getJSON()->items ?? [];
-        $notes = $this->request->getJSON()->notes ?? null;
-
-        if (empty($items)) {
-            return $this->response->setStatusCode(400)->setJSON(['error' => 'No items provided']);
-        }
-
         try {
-            // Create supply request
+            if (!$this->request->isAJAX()) {
+                return $this->response->setStatusCode(400)->setJSON(['error' => 'AJAX request required']);
+            }
+
+            if (!session('user_id')) {
+                return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
+            }
+
+            $db = db_connect();
+
+            // Get user's branch
+            $user = $db->table('users')
+                       ->select('branch_id')
+                       ->where('id', session('user_id'))
+                       ->get()
+                       ->getRowArray();
+
+            $branchId = $user['branch_id'] ?? null;
+
+            // If user has no branch or an invalid branch, automatically attach to first existing branch
+            $branch = null;
+            if ($branchId) {
+                $branch = $db->table('branches')
+                             ->select('id')
+                             ->where('id', $branchId)
+                             ->get()
+                             ->getRowArray();
+            }
+
+            if (! $branch) {
+                // Pick the first branch as a default
+                $defaultBranch = $db->table('branches')
+                                    ->select('id')
+                                    ->orderBy('id', 'ASC')
+                                    ->get()
+                                    ->getRowArray();
+
+                if (! $defaultBranch) {
+                    return $this->response->setStatusCode(500)->setJSON([
+                        'error' => 'No branches are configured in the system. Please ask an admin to add a branch first.',
+                    ]);
+                }
+
+                $branchId = (int) $defaultBranch['id'];
+
+                // Persist this assignment back to the user so future requests are consistent
+                $db->table('users')
+                   ->where('id', session('user_id'))
+                   ->update(['branch_id' => $branchId]);
+
+                // Optionally log this change
+                $db->table('activity_logs')->insert([
+                    'user_id'    => session('user_id'),
+                    'action'     => 'user_branch_auto_assigned',
+                    'details'    => json_encode(['branch_id' => $branchId]),
+                    'created_at' => date('Y-m-d H:i:s'),
+                ]);
+            }
+
+            // Validate input
+            $json = $this->request->getJSON();
+            $items = $json->items ?? [];
+            $notes = $json->notes ?? null;
+            $preferredSupplierId = isset($json->preferred_supplier_id) ? (int) $json->preferred_supplier_id : null;
+            $requiredDeliveryDate = isset($json->required_delivery_date) ? (string) $json->required_delivery_date : null;
+
+            if (empty($items)) {
+                return $this->response->setStatusCode(400)->setJSON(['error' => 'No items provided']);
+            }
+
+            // Create supply request for the resolved branch
             $requestId = $this->supplyRequestModel->createWithItems(
-                $user['branch_id'],
+                $branchId,
                 session('user_id'),
                 $items,
                 $notes
             );
+
+            if ($requestId) {
+                $db->table('supply_requests')->where('id', (int) $requestId)->update([
+                    'preferred_supplier_id' => $preferredSupplierId ?: null,
+                    'required_delivery_date' => $requiredDeliveryDate ?: null,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+
+                $roleRows = $db->table('roles')
+                    ->select('roles.name')
+                    ->join('user_roles', 'user_roles.role_id = roles.id')
+                    ->where('user_roles.user_id', (int) session('user_id'))
+                    ->get()->getResultArray();
+                $roleNames = array_map(function ($r) {
+                    return $r['name'];
+                }, $roleRows);
+
+                if (in_array('branch_manager', $roleNames, true)) {
+                    $this->supplyRequestModel->branchApproveRequest((int) $requestId, (int) session('user_id'));
+                    $this->notifyCentralAdmins(
+                        'Supply Request Pending Central Approval',
+                        'A supply request has been submitted by a branch manager and is awaiting central approval.',
+                        (int) $requestId
+                    );
+                }
+            }
 
             return $this->response->setJSON([
                 'success' => true,
                 'requestId' => $requestId,
                 'message' => 'Supply request submitted successfully',
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             log_message('error', 'Supply request submission failed: ' . $e->getMessage());
-            return $this->response->setStatusCode(500)->setJSON(['error' => 'Failed to submit request']);
+            return $this->response->setStatusCode(500)->setJSON([
+                'error' => 'Failed to submit request: ' . $e->getMessage(),
+            ]);
         }
     }
 
@@ -190,8 +277,9 @@ class SupplyRequest extends BaseController
             return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
         }
 
-        $requestId = (int)$this->request->getJSON()->request_id ?? 0;
-        $approvalNotes = $this->request->getJSON()->approval_notes ?? null;
+        $json = $this->request->getJSON(true);
+        $requestId = (int) ($json['request_id'] ?? 0);
+        $approvalNotes = $json['approval_notes'] ?? null;
 
         if (!$requestId) {
             return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid request ID']);
@@ -227,8 +315,9 @@ class SupplyRequest extends BaseController
             return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
         }
 
-        $requestId = (int)$this->request->getJSON()->request_id ?? 0;
-        $reason = $this->request->getJSON()->reason ?? '';
+        $json = $this->request->getJSON(true);
+        $requestId = (int) ($json['request_id'] ?? 0);
+        $reason = (string) ($json['reason'] ?? '');
 
         if (!$requestId || !$reason) {
             return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid request or reason']);
@@ -256,11 +345,16 @@ class SupplyRequest extends BaseController
             return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
         }
 
-        $count = $this->supplyRequestModel
-                      ->where('status', 'Pending')
-                      ->countAllResults();
+        try {
+            $count = $this->supplyRequestModel
+                          ->where('supply_requests.status', 'Pending Central Approval')
+                          ->countAllResults();
 
-        return $this->response->setJSON(['count' => $count]);
+            return $this->response->setJSON(['count' => $count]);
+        } catch (\Throwable $e) {
+            log_message('error', 'SupplyRequest getPendingCount failed: ' . $e->getMessage());
+            return $this->response->setStatusCode(500)->setJSON(['error' => 'Failed to get pending count']);
+        }
     }
 
     /**
@@ -278,19 +372,198 @@ class SupplyRequest extends BaseController
 
         $db = db_connect();
 
-        // Get user's branch
+        // Get user's branch (same logic as submit(): auto-assign a valid branch if needed)
         $user = $db->table('users')
                    ->select('branch_id')
                    ->where('id', session('user_id'))
                    ->get()
                    ->getRowArray();
 
-        if (!$user || !$user['branch_id']) {
-            return $this->response->setStatusCode(400)->setJSON(['error' => 'User has no assigned branch']);
+        $branchId = $user['branch_id'] ?? null;
+
+        $branch = null;
+        if ($branchId) {
+            $branch = $db->table('branches')
+                         ->select('id')
+                         ->where('id', $branchId)
+                         ->get()
+                         ->getRowArray();
         }
 
-        $requests = $this->supplyRequestModel->getByBranch($user['branch_id']);
+        if (! $branch) {
+            $defaultBranch = $db->table('branches')
+                                ->select('id')
+                                ->orderBy('id', 'ASC')
+                                ->get()
+                                ->getRowArray();
+
+            if (! $defaultBranch) {
+                return $this->response->setStatusCode(500)->setJSON([
+                    'error' => 'No branches are configured in the system.',
+                ]);
+            }
+
+            $branchId = (int) $defaultBranch['id'];
+
+            // Persist auto-assignment (if not already set)
+            $db->table('users')
+               ->where('id', session('user_id'))
+               ->update(['branch_id' => $branchId]);
+
+            $db->table('activity_logs')->insert([
+                'user_id'    => session('user_id'),
+                'action'     => 'user_branch_auto_assigned',
+                'details'    => json_encode(['branch_id' => $branchId, 'source' => 'myRequests']),
+                'created_at' => date('Y-m-d H:i:s'),
+            ]);
+        }
+
+        $requests = $this->supplyRequestModel->getByBranch($branchId);
 
         return $this->response->setJSON(['requests' => $requests]);
+    }
+
+    public function pendingBranch()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'AJAX request required']);
+        }
+
+        if (!session('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
+        }
+
+        $db = db_connect();
+        $user = $db->table('users')->select('branch_id')->where('id', session('user_id'))->get()->getRowArray();
+        $branchId = (int) ($user['branch_id'] ?? 0);
+        if (!$branchId) {
+            return $this->response->setStatusCode(403)->setJSON(['error' => 'User has no assigned branch']);
+        }
+
+        $pending = $this->supplyRequestModel->getPendingBranchApproval($branchId);
+        foreach ($pending as &$req) {
+            $with = $this->supplyRequestModel->getWithItems($req['id']);
+            if ($with) {
+                $req = $with;
+            }
+        }
+
+        return $this->response->setJSON(['success' => true, 'requests' => $pending]);
+    }
+
+    public function branchApprove()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'AJAX request required']);
+        }
+
+        if (!session('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
+        }
+
+        $json = $this->request->getJSON();
+        $requestId = (int) ($json->request_id ?? 0);
+        $notes = $json->notes ?? null;
+        if (!$requestId) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid request ID']);
+        }
+
+        try {
+            $db = db_connect();
+            $user = $db->table('users')->select('branch_id')->where('id', session('user_id'))->get()->getRowArray();
+            $branchId = (int) ($user['branch_id'] ?? 0);
+
+            $req = $this->supplyRequestModel->find($requestId);
+            if (!$req || (int) ($req['branch_id'] ?? 0) !== $branchId) {
+                return $this->response->setStatusCode(403)->setJSON(['error' => 'Not allowed']);
+            }
+
+            $this->supplyRequestModel->branchApproveRequest($requestId, (int) session('user_id'), is_string($notes) ? $notes : null);
+
+            $this->notifyCentralAdmins(
+                'Supply Request Pending Central Approval',
+                'A supply request has been approved by the branch and is awaiting central approval.',
+                $requestId
+            );
+
+            return $this->response->setJSON(['success' => true]);
+        } catch (\Exception $e) {
+            log_message('error', 'Branch approve supply request failed: ' . $e->getMessage());
+            return $this->response->setStatusCode(500)->setJSON(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function branchReject()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'AJAX request required']);
+        }
+
+        if (!session('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
+        }
+
+        $json = $this->request->getJSON();
+        $requestId = (int) ($json->request_id ?? 0);
+        $reason = trim((string) ($json->reason ?? ''));
+        if (!$requestId || !$reason) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid request or reason']);
+        }
+
+        try {
+            $db = db_connect();
+            $user = $db->table('users')->select('branch_id')->where('id', session('user_id'))->get()->getRowArray();
+            $branchId = (int) ($user['branch_id'] ?? 0);
+
+            $req = $this->supplyRequestModel->find($requestId);
+            if (!$req || (int) ($req['branch_id'] ?? 0) !== $branchId) {
+                return $this->response->setStatusCode(403)->setJSON(['error' => 'Not allowed']);
+            }
+
+            $this->supplyRequestModel->branchRejectRequest($requestId, (int) session('user_id'), $reason);
+
+            $this->notificationModel->createNotification(
+                (int) ($req['requested_by'] ?? 0),
+                'supply_request_rejected_by_branch',
+                'Supply Request Rejected by Branch',
+                'Your supply request was rejected by the branch manager: ' . $reason,
+                $requestId,
+                'supply_request'
+            );
+
+            return $this->response->setJSON(['success' => true]);
+        } catch (\Exception $e) {
+            log_message('error', 'Branch reject supply request failed: ' . $e->getMessage());
+            return $this->response->setStatusCode(500)->setJSON(['error' => $e->getMessage()]);
+        }
+    }
+
+    private function notifyCentralAdmins(string $title, string $message, ?int $relatedId = null): void
+    {
+        $db = db_connect();
+        if (! $db->tableExists('user_roles') || ! $db->tableExists('roles')) {
+            return;
+        }
+
+        $adminUserIds = $db->table('user_roles ur')
+            ->select('ur.user_id')
+            ->join('roles r', 'r.id = ur.role_id')
+            ->whereIn('r.name', ['central_admin', 'system_admin'])
+            ->get()->getResultArray();
+
+        foreach ($adminUserIds as $row) {
+            $uid = (int) ($row['user_id'] ?? 0);
+            if ($uid <= 0) {
+                continue;
+            }
+            $this->notificationModel->createNotification(
+                $uid,
+                'supply_request_pending_central',
+                $title,
+                $message,
+                $relatedId,
+                'supply_request'
+            );
+        }
     }
 }

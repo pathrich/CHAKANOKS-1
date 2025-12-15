@@ -96,14 +96,19 @@ class NotificationModel extends Model
      */
     public function createNotification($recipientId, $type, $title, $message, $relatedId = null, $relatedType = null)
     {
-        return $this->insert([
-            'recipient_id'  => $recipientId,
-            'type'          => $type,
-            'title'         => $title,
-            'message'       => $message,
-            'related_id'    => $relatedId,
-            'related_type'  => $relatedType,
-            'is_read'       => 0,
-        ]);
+        $data = [
+            'recipient_id' => $recipientId,
+            'type' => $type,
+            'title' => $title,
+            'message' => $message,
+            'related_id' => $relatedId,
+            'related_type' => $relatedType,
+            'is_read' => 0,
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+
+        $builder = $this->db->table($this->table);
+        $ok = $builder->insert($data);
+        return $ok ? $this->db->insertID() : false;
     }
 }

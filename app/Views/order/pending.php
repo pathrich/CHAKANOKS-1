@@ -14,7 +14,7 @@
                     <h1>Pending Orders</h1>
                     <p class="text-muted">Review and approve orders from branch managers</p>
                 </div>
-                <a href="/dashboard" class="btn btn-outline-secondary">
+                <a href="<?= site_url('dashboard') ?>" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left"></i> Back to Dashboard
                 </a>
             </div>
@@ -164,7 +164,7 @@ document.querySelectorAll('.approve-order-btn').forEach(btn => {
 });
 
 document.getElementById('confirmApproveBtn').addEventListener('click', function() {
-    fetch('/order/approve', {
+    fetch('<?= site_url('order/approve') ?>', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -205,7 +205,7 @@ document.getElementById('confirmRejectBtn').addEventListener('click', function()
         return;
     }
 
-    fetch('/order/cancel', {
+    fetch('<?= site_url('order/cancel') ?>', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

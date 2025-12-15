@@ -33,16 +33,25 @@ class Auth extends Controller
 
             $userRoles = array_map(fn($r) => $r['name'], $roles);
 
+            // Normalize any legacy or alternate role names to align with app workflows
+            // Treat franchise_manager as franchise for dashboard/navigation purposes
+            $normalizedRoles = array_map(function ($role) {
+                if ($role === 'franchise_manager') {
+                    return 'franchise';
+                }
+                return $role;
+            }, $userRoles);
+
             session()->set('user_roles', $userRoles);
             $primaryRole = null;
             foreach (['system_admin', 'central_admin', 'branch_manager', 'inventory_staff', 'supplier', 'franchise', 'logistics_coordinator'] as $candidate) {
-                if (in_array($candidate, $userRoles, true)) {
+                if (in_array($candidate, $normalizedRoles, true)) {
                     $primaryRole = $candidate;
                     break;
                 }
             }
-            if ($primaryRole === null && ! empty($userRoles)) {
-                $primaryRole = $userRoles[0];
+            if ($primaryRole === null && ! empty($normalizedRoles)) {
+                $primaryRole = $normalizedRoles[0];
             }
             session()->set('user_role', $primaryRole);
 
@@ -64,9 +73,9 @@ class Auth extends Controller
             }
 
             if (
-                in_array('central_admin', $userRoles, true) ||
-                in_array('branch_manager', $userRoles, true) ||
-                in_array('franchise', $userRoles, true)
+                in_array('central_admin', $normalizedRoles, true) ||
+                in_array('branch_manager', $normalizedRoles, true) ||
+                in_array('franchise', $normalizedRoles, true)
             ) {
                 return redirect()->to(site_url('dashboard'));
             }

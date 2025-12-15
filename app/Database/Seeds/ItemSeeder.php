@@ -37,6 +37,9 @@ class ItemSeeder extends Seeder
             [ 'name' => 'Organic Apples', 'sku' => 'SKU-APP-001', 'barcode' => '1234567890123', 'category_id' => $catMap['Produce'] ?? null, 'perishable' => 1, 'min_stock' => 50 ],
             [ 'name' => 'Ground Beef', 'sku' => 'SKU-BEF-001', 'barcode' => '2234567890123', 'category_id' => $catMap['Meat & Poultry'] ?? null, 'perishable' => 1, 'min_stock' => 30 ],
             [ 'name' => 'Whole Milk', 'sku' => 'SKU-MLK-001', 'barcode' => '3234567890123', 'category_id' => $catMap['Dairy'] ?? null, 'perishable' => 1, 'min_stock' => 20 ],
+            [ 'name' => 'Whole Chicken', 'sku' => 'SKU-CHK-WHOLE-001', 'barcode' => '4234567890123', 'category_id' => $catMap['Meat & Poultry'] ?? null, 'perishable' => 1, 'min_stock' => 20 ],
+            [ 'name' => 'Chicken Cuts', 'sku' => 'SKU-CHK-CUTS-001', 'barcode' => '5234567890123', 'category_id' => $catMap['Meat & Poultry'] ?? null, 'perishable' => 1, 'min_stock' => 20 ],
+            [ 'name' => 'Processed Chicken', 'sku' => 'SKU-CHK-PROC-001', 'barcode' => '6234567890123', 'category_id' => $catMap['Meat & Poultry'] ?? null, 'perishable' => 1, 'min_stock' => 20 ],
         ];
         $this->db->table('items')->emptyTable();
         $this->db->table('items')->insertBatch($items);

@@ -14,6 +14,17 @@ $title = 'Franchise Dashboard';
         </div>
     </div>
 
+    <!-- Notifications Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Notifications</h5>
+            <span class="badge bg-primary" id="franchiseNotificationsBadge" style="display:none;">0</span>
+        </div>
+        <div class="card-body" id="franchiseNotificationsContainer">
+            <div class="text-muted">Loading notifications...</div>
+        </div>
+    </div>
+
     <?php if (!empty($branch)): ?>
         <div class="card mb-4">
             <div class="card-body">
@@ -81,4 +92,52 @@ $title = 'Franchise Dashboard';
     <?php endif; ?>
 </div>
 
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('<?= site_url('api/notifications') ?>?unreadOnly=1&limit=5', {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const container = document.getElementById('franchiseNotificationsContainer');
+        const badge = document.getElementById('franchiseNotificationsBadge');
+
+        if (!container) return;
+
+        const notifications = data.notifications || [];
+        const unreadCount = data.unreadCount || 0;
+
+        if (badge && unreadCount > 0) {
+            badge.textContent = unreadCount;
+            badge.style.display = 'inline-block';
+        }
+
+        if (notifications.length === 0) {
+            container.innerHTML = '<div class="text-muted">No notifications at this time.</div>';
+            return;
+        }
+
+        let html = '<ul class="list-group list-group-flush">';
+        notifications.forEach(n => {
+            const created = n.created_at ? new Date(n.created_at).toLocaleString() : '';
+            html += '<li class="list-group-item">'
+                 +  '<div class="fw-bold">' + (n.title ?? 'Notification') + '</div>'
+                 +  '<div class="small text-muted">' + (n.message ?? '') + '</div>'
+                 +  '<div class="small text-muted mt-1">' + created + '</div>'
+                 +  '</li>';
+        });
+        html += '</ul>';
+        container.innerHTML = html;
+    })
+    .catch(() => {
+        const container = document.getElementById('franchiseNotificationsContainer');
+        if (container) {
+            container.innerHTML = '<div class="text-muted">Unable to load notifications.</div>';
+        }
+    });
+});
+</script>
 <?= $this->endSection() ?>

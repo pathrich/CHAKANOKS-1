@@ -14,7 +14,7 @@
                     <h1>Orders Management</h1>
                     <p class="text-muted">Create and manage orders for your branch</p>
                 </div>
-                <a href="/order/create" class="btn btn-primary">
+                <a href="<?= site_url('order/create') ?>" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Create New Order
                 </a>
             </div>
@@ -75,7 +75,7 @@
                                             <td><?= $order['total_items'] ?></td>
                                             <td>₱<?= number_format($order['total_amount'], 2) ?></td>
                                             <td>
-                                                <a href="/order/edit/<?= $order['id'] ?>" class="btn btn-sm btn-info" title="Edit">
+                                                <a href="<?= site_url('order/edit/' . $order['id']) ?>" class="btn btn-sm btn-info" title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <button class="btn btn-sm btn-success submit-order-btn" data-order-id="<?= $order['id'] ?>" title="Submit for Approval">
@@ -92,7 +92,7 @@
                         </div>
                     <?php else: ?>
                         <div class="alert alert-info">
-                            No draft orders. <a href="/order/create">Create one now</a>
+                            No draft orders. <a href="<?= site_url('order/create') ?>">Create one now</a>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -269,7 +269,7 @@ document.querySelectorAll('.submit-order-btn').forEach(btn => {
 });
 
 document.getElementById('confirmSubmitBtn').addEventListener('click', function() {
-    fetch('/order/submit', {
+    fetch('<?= site_url('order/submit') ?>', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -304,7 +304,7 @@ document.querySelectorAll('.delete-order-btn').forEach(btn => {
 });
 
 document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-    fetch('/order/cancel', {
+    fetch('<?= site_url('order/cancel') ?>', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -151,8 +151,9 @@ class PurchaseOrder extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['error' => 'AJAX request required']);
         }
 
-        $poId = (int)$this->request->getJSON()->po_id ?? 0;
-        $notes = $this->request->getJSON()->notes ?? null;
+        $json = $this->request->getJSON(true);
+        $poId = (int) ($json['po_id'] ?? 0);
+        $notes = $json['notes'] ?? null;
 
         $supplierId = $this->getSupplierIdForCurrentUser();
 
@@ -188,6 +189,34 @@ class PurchaseOrder extends BaseController
 
             // Notify admin and manager
             $this->notifyOnSupplierAction($po, 'CONFIRMED', $notes);
+
+            // Create a logistics delivery row for this PO (once)
+            if ($db->tableExists('deliveries') && $db->fieldExists('current_location', 'deliveries')) {
+                $token = 'PO#' . $poId;
+                $existingDelivery = $db->table('deliveries')
+                    ->select('id')
+                    ->where('type', 'PO')
+                    ->where('current_location', $token)
+                    ->get()->getRowArray();
+
+                if (! $existingDelivery) {
+                    $now = gmdate('Y-m-d H:i:s');
+                    $db->table('deliveries')->insert([
+                        'order_id' => null,
+                        'transfer_id' => null,
+                        'type' => 'PO',
+                        'driver_name' => null,
+                        'vehicle' => null,
+                        'route' => null,
+                        'status' => 'scheduled',
+                        'scheduled_at' => null,
+                        'current_location' => $token,
+                        'created_by' => session('user_id') ?: null,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ]);
+                }
+            }
 
             return $this->response->setJSON(['success' => true, 'message' => 'PO confirmed by supplier']);
         } catch (\Exception $e) {
@@ -309,8 +338,9 @@ class PurchaseOrder extends BaseController
             return $this->response->setStatusCode(400)->setJSON(['error' => 'AJAX request required']);
         }
 
-        $poId = (int)$this->request->getJSON()->po_id ?? 0;
-        $trackingNumber = $this->request->getJSON()->tracking_number ?? '';
+        $json = $this->request->getJSON(true);
+        $poId = (int) ($json['po_id'] ?? 0);
+        $trackingNumber = (string) ($json['tracking_number'] ?? '');
 
         if (!$poId || !$trackingNumber) {
             return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid PO or tracking number']);
@@ -344,6 +374,34 @@ class PurchaseOrder extends BaseController
 
             $this->notifyOnShipment($po, $trackingNumber);
 
+            // Ensure there is a logistics delivery row for this PO (once)
+            if ($db->tableExists('deliveries') && $db->fieldExists('current_location', 'deliveries')) {
+                $token = 'PO#' . $poId;
+                $existingDelivery = $db->table('deliveries')
+                    ->select('id')
+                    ->where('type', 'PO')
+                    ->where('current_location', $token)
+                    ->get()->getRowArray();
+
+                if (! $existingDelivery) {
+                    $now = gmdate('Y-m-d H:i:s');
+                    $db->table('deliveries')->insert([
+                        'order_id' => null,
+                        'transfer_id' => null,
+                        'type' => 'PO',
+                        'driver_name' => null,
+                        'vehicle' => null,
+                        'route' => null,
+                        'status' => 'scheduled',
+                        'scheduled_at' => null,
+                        'current_location' => $token,
+                        'created_by' => session('user_id') ?: null,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ]);
+                }
+            }
+
             return $this->response->setJSON(['success' => true, 'message' => 'Shipment recorded']);
         } catch (\Exception $e) {
             return $this->response->setStatusCode(500)->setJSON(['error' => $e->getMessage()]);
@@ -358,6 +416,11 @@ class PurchaseOrder extends BaseController
     {
         if (!session('user_id')) {
             return $this->response->setStatusCode(401)->setJSON(['error' => 'Not authenticated']);
+        }
+
+        $roles = $this->getUserRoles();
+        if (!in_array('central_admin', $roles, true) && !in_array('system_admin', $roles, true)) {
+            return $this->response->setStatusCode(403)->setJSON(['error' => 'Access denied']);
         }
 
         $poId = (int)$this->request->getJSON()->po_id ?? 0;
@@ -375,13 +438,25 @@ class PurchaseOrder extends BaseController
                 throw new \Exception('PO not found');
             }
 
-            // Get supply request to find branch
-            $sr = $db->table('supply_requests')
-                     ->where('id', $po['supply_request_id'])
-                     ->get()
-                     ->getRowArray();
-            if (!$sr) {
-                throw new \Exception('Supply request not found');
+            $branchId = null;
+            $sr = null;
+            if (!empty($po['supply_request_id'])) {
+                $sr = $db->table('supply_requests')
+                    ->where('id', $po['supply_request_id'])
+                    ->get()
+                    ->getRowArray();
+                if (!$sr) {
+                    throw new \Exception('Supply request not found');
+                }
+                $branchId = (int) ($sr['branch_id'] ?? 0);
+            }
+
+            if (!$branchId) {
+                $branchId = (int) ($po['branch_id'] ?? 0);
+            }
+
+            if (!$branchId) {
+                throw new \Exception('Branch not found for this PO');
             }
 
             // Get PO items
@@ -389,24 +464,22 @@ class PurchaseOrder extends BaseController
 
             // Update inventory for each item
             foreach ($items as $item) {
-                $qty = $item['quantity'];
-                // Update or insert branch stock
-                $existing = $db->table('branch_stocks')
-                              ->where('branch_id', $sr['branch_id'])
-                              ->where('item_id', $item['item_id'])
-                              ->get()->getRowArray();
-                if ($existing) {
-                    $db->table('branch_stocks')->update(
-                        ['quantity' => $existing['quantity'] + $qty],
-                        ['id' => $existing['id']]
-                    );
-                } else {
-                    $db->table('branch_stocks')->insert([
-                        'branch_id' => $sr['branch_id'],
-                        'item_id' => $item['item_id'],
-                        'quantity' => $qty,
-                    ]);
+                $qty = (int) ($item['quantity'] ?? 0);
+                $itemId = (int) ($item['item_id'] ?? 0);
+                if ($qty <= 0 || $itemId <= 0) {
+                    continue;
                 }
+
+                // IMPORTANT: branch_stocks is treated as a movement table in this app (inventory sums quantity).
+                // So we insert a new positive movement row rather than overwriting an existing row.
+                $db->table('branch_stocks')->insert([
+                    'branch_id'   => (int) $branchId,
+                    'item_id'     => $itemId,
+                    'quantity'    => $qty,
+                    'expiry_date' => null,
+                    'created_at'  => date('Y-m-d H:i:s'),
+                    'updated_at'  => date('Y-m-d H:i:s'),
+                ]);
             }
 
             // Update PO status
@@ -415,14 +488,37 @@ class PurchaseOrder extends BaseController
                 ['id' => $poId]
             );
 
+            // Mark related supply request as fulfilled (end of this workflow)
+            if (!empty($po['supply_request_id'])) {
+                $db->table('supply_requests')->update(
+                    ['status' => 'Fulfilled', 'updated_at' => date('Y-m-d H:i:s')],
+                    ['id' => (int) $po['supply_request_id']]
+                );
+            }
+
+            $this->logActivity('po_delivered_inventory_updated', [
+                'po_id' => $poId,
+                'po_number' => $po['po_number'] ?? null,
+                'supply_request_id' => $po['supply_request_id'] ?? null,
+                'branch_id' => (int) $branchId,
+                'items' => array_map(function($it) {
+                    return [
+                        'item_id' => (int) ($it['item_id'] ?? 0),
+                        'quantity' => (int) ($it['quantity'] ?? 0),
+                    ];
+                }, $items),
+            ]);
+
             $this->auditModel->log(
                 'po_delivered_inventory_updated',
-                'PO ' . $poId . ' delivered. Inventory updated for branch ' . $sr['branch_id'],
+                'PO ' . $poId . ' delivered. Inventory updated for branch ' . $branchId,
                 session('user_id'),
                 'admin'
             );
 
-            $this->notifyOnDelivery($po, $sr);
+            if ($sr) {
+                $this->notifyOnDelivery($po, $sr);
+            }
 
             $db->transComplete();
 

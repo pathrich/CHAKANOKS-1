@@ -47,15 +47,19 @@
                                             Request #<?= $request['id'] ?>
                                             <span class="badge bg-warning">Pending</span>
                                         </h5>
-                                        <small class="text-muted"><?= date('M d, Y', strtotime($request['created_at'])) ?></small>
+                                        <?php
+                                            $createdAt = $request['created_at'] ?? null;
+                                            $createdLabel = $createdAt ? date('M d, Y', strtotime($createdAt)) : '-';
+                                        ?>
+                                        <small class="text-muted"><?= $createdLabel ?></small>
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <p class="mb-2">
-                                        <strong>Branch:</strong> <?= $request['branch_name'] ?>
+                                        <strong>Branch:</strong> <?= htmlspecialchars($request['branch_name'] ?? '-') ?>
                                     </p>
                                     <p class="mb-2">
-                                        <strong>Requested by:</strong> <?= $request['requester_name'] ?>
+                                        <strong>Requested by:</strong> <?= htmlspecialchars($request['requester_name'] ?? '-') ?>
                                     </p>
                                     <p class="mb-2">
                                         <strong>Total Items:</strong> <?= $request['total_items'] ?>

@@ -63,7 +63,7 @@
                     <button type="submit" class="btn btn-success" id="submitBtn">
                         <i class="fas fa-paper-plane"></i> Save & Submit for Approval
                     </button>
-                    <a href="/order" class="btn btn-outline-secondary">Cancel</a>
+                    <a href="<?= site_url('order') ?>" class="btn btn-outline-secondary">Cancel</a>
                 </div>
             </form>
         </div>
@@ -107,10 +107,7 @@
             <div class="row g-2 mt-2">
                 <div class="col-md-4 d-none chicken-cut-wrapper">
                     <select class="form-select form-select-sm chicken-cut-select">
-                        <option value="">Select cut...</option>
-                        <option value="Legs">Legs</option>
-                        <option value="Wings">Wings</option>
-                        <option value="Breast">Breast</option>
+                        <option value="">Select option...</option>
                     </select>
                 </div>
                 <div class="col-md-<?= 12 ?>">
@@ -126,18 +123,37 @@ let itemCount = 0;
 let itemsData = [];
 
 // Load available items on page load
-document.addEventListener('DOMContentLoaded', function() {
-    loadItems();
+document.addEventListener('DOMContentLoaded', async function() {
+    await loadItems();
     addItemRow();
 });
 
 async function loadItems() {
     try {
-        const response = await fetch('/api/items');
-        itemsData = await response.json();
+        const response = await fetch('<?= site_url('api/items') ?>', {
+            credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to load items (${response.status})`);
+        }
+
+        const allItems = await response.json();
+        if (!Array.isArray(allItems)) {
+            throw new Error('Invalid items response');
+        }
+        const excludedSkus = new Set(['SKU-APP-001', 'SKU-BEF-001', 'SKU-MLK-001']);
+
+        itemsData = allItems.filter(it => {
+            const sku = String(it.sku || '').trim();
+            return !excludedSkus.has(sku);
+        });
     } catch (error) {
         console.error('Failed to load items:', error);
-        alert('Failed to load items');
+        alert('Failed to load items. Please refresh and try again.');
     }
 }
 
@@ -157,10 +173,48 @@ function addItemRow() {
         select.appendChild(option);
     });
 
-    // Show cuts dropdown only for "Chicken cuts" item
+    // Configure dynamic dropdown for Chicken Cuts and Processed Chicken
+    function setCutOptions(options) {
+        if (!cutSelect) return;
+        cutSelect.innerHTML = '';
+
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Select option...';
+        cutSelect.appendChild(placeholder);
+
+        options.forEach(label => {
+            const opt = document.createElement('option');
+            opt.value = label;
+            opt.textContent = label;
+            cutSelect.appendChild(opt);
+        });
+    }
+
+    // Show dropdown and populate options based on selected item
     select.addEventListener('change', function() {
         const selectedItem = itemsData.find(i => i.id == this.value);
-        if (selectedItem && selectedItem.name && selectedItem.name.toLowerCase().includes('chicken cuts')) {
+        if (!selectedItem || !selectedItem.name) {
+            cutWrapper.classList.add('d-none');
+            if (cutSelect) cutSelect.value = '';
+            return;
+        }
+
+        const name = selectedItem.name.toLowerCase();
+
+        const isChicken = name.includes('chicken');
+        const isCut = name.includes('cut');
+        const isProcessed = name.includes('processed');
+        const isMarinated = name.includes('marinated');
+        const isSeasoned = name.includes('seasoned');
+
+        if (isChicken && isCut) {
+            // Chicken cuts (Legs, Wings, Breast)
+            setCutOptions(['Legs', 'Wings', 'Breast']);
+            cutWrapper.classList.remove('d-none');
+        } else if (isChicken && (isProcessed || isMarinated || isSeasoned)) {
+            // Processed chicken (Marinated, Seasoned)
+            setCutOptions(['Marinated', 'Seasoned']);
             cutWrapper.classList.remove('d-none');
         } else {
             cutWrapper.classList.add('d-none');
@@ -253,7 +307,7 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
     }
     
     try {
-        const response = await fetch('/order/store', {
+        const response = await fetch('<?= site_url('order/store') ?>', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -274,7 +328,7 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
             } else {
                 // Just save as draft
                 alert(`Order ${data.orderNumber} saved as draft!`);
-                window.location.href = '/order';
+                window.location.href = '<?= site_url('order') ?>';
             }
         } else {
             alert('Error: ' + (data.error || 'Failed to create order'));
@@ -289,7 +343,7 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
 
 async function submitOrder(orderId) {
     try {
-        const response = await fetch('/order/submit', {
+        const response = await fetch('<?= site_url('order/submit') ?>', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -302,7 +356,7 @@ async function submitOrder(orderId) {
         
         if (data.success) {
             alert('Order submitted for approval!');
-            window.location.href = '/order';
+            window.location.href = '<?= site_url('order') ?>';
         } else {
             alert('Error: ' + (data.error || 'Failed to submit order'));
         }
